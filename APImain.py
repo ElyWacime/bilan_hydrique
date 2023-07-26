@@ -3,7 +3,7 @@ import json
 import pandas as pd
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response
 import logging
 from logging.handlers import RotatingFileHandler
 from typing import Optional
@@ -56,28 +56,6 @@ class Configuration(BaseModel):
     de_0_a_6_semaine_apres_semis: Optional[Tuple] = None
     de_6_semaine_au_stade: Optional[Tuple] = None
     du_stade_a_recolte: Optional[Tuple] = None
-
-    
-    @validator('*', always=True)
-    def check_dates_for_plant(cls, v, values, field):
-        # List of fields required for each plant
-        required_fields_for_plants = {
-            'pomme_de_terre': [
-                'Plante_a_50_de_levée', 'de_50_de_levée_a_50_recouvrement',
-                'de_50_recouvrement_a_recouvrement_total', 'recvroument_total_plus_30_jours',
-                'recvroument_total_plus_30_jours_a_debut_saison', 'debut_saison_a_maturite'
-            ],
-            'courgette': [
-                'plantation_a_fleuraison', 'fleuraison_a_mi_recolte', 'mi_recolte_fin_recolte'
-            ],
-            'poireaux': ['reprise_a_recolte'],
-            'carotte': ['de_0_a_6_semaine_apres_semis', 'de_6_semaine_au_stade', 'du_stade_a_recolte']
-        }
-        if 'Plant_name' in values:
-            required_fields = required_fields_for_plants.get(values['Plant_name'], [])
-            if field.alias in required_fields and v is None:
-                raise ValueError(f'{field.alias} is required when Plant_name is {values["Plant_name"]}')
-        return v
 
 
 @app.route('/bilan_hydrique', methods=['POST'])
@@ -138,81 +116,87 @@ def bilan_hydrique():
         'diffuse_radiation': 'sum'
     })
 
+    
+    def safely_parse_date(date_string, date_format):
+        return datetime.strptime(date_string, date_format) if date_string is not None else None
+    
+    def safely_parse_None(my_tuple):
+        return my_tuple if my_tuple is not None else ("2000-01-01", "2000-01-10")
 
     def calculate_KC_values(plant_name, date):
         date_format = "%Y-%m-%d"
-
+        
         plants = {
             "Courgette" : [
                 {
-                    "start_date" : datetime.strptime(configuration.plantation_a_fleuraison[0], date_format),
-                    "end_date" : datetime.strptime(configuration.plantation_a_fleuraison[1], date_format),
+                    "start_date" : safely_parse_date(safely_parse_None(configuration.plantation_a_fleuraison)[0], date_format),
+                    "end_date" : safely_parse_date(safely_parse_None(configuration.plantation_a_fleuraison)[1], date_format),
                     "KC" : 0.5
                 },
                 {
-                    "start_date" : datetime.strptime(configuration.fleuraison_a_mi_recolte[0], date_format),
-                    "end_date" : datetime.strptime(configuration.fleuraison_a_mi_recolte[1], date_format),
+                    "start_date" : safely_parse_date(safely_parse_None(configuration.fleuraison_a_mi_recolte)[0], date_format),
+                    "end_date" : safely_parse_date(safely_parse_None(configuration.fleuraison_a_mi_recolte)[1], date_format),
                     "KC" : 1
                 },
                 {
-                    "start_date" : datetime.strptime(configuration.mi_recolte_fin_recolte[0], date_format),
-                    "end_date" : datetime.strptime(configuration.mi_recolte_fin_recolte[1], date_format),
+                    "start_date" : safely_parse_date(safely_parse_None(configuration.mi_recolte_fin_recolte)[0], date_format),
+                    "end_date" : safely_parse_date(safely_parse_None(configuration.mi_recolte_fin_recolte)[1], date_format),
                     "KC" : 0.7
                 }
             ],
             "Poireau" : [
                 {
-                    "start_date" : datetime.strptime(configuration.reprise_a_recolte[0], date_format),
-                    "end_date" : datetime.strptime(configuration.reprise_a_recolte[1], date_format),
+                    "start_date" : safely_parse_date(safely_parse_None(configuration.reprise_a_recolte)[0], date_format),
+                    "end_date" : safely_parse_date(safely_parse_None(configuration.reprise_a_recolte)[1], date_format),
                     "KC" : 0.7
                 }
             ],
             "Carotte" : [
                 {
-                    "start_date" : datetime.strptime(configuration.de_0_a_6_semaine_apres_semis[0], date_format),
-                    "end_date" : datetime.strptime(configuration.de_0_a_6_semaine_apres_semis[1], date_format),
+                    "start_date" : safely_parse_date(safely_parse_None(configuration.de_0_a_6_semaine_apres_semis)[0], date_format),
+                    "end_date" : safely_parse_date(safely_parse_None(configuration.de_0_a_6_semaine_apres_semis)[1], date_format),
                     "KC" : 0.4
                 },
                 {
-                    "start_date" : datetime.strptime(configuration.de_6_semaine_au_stade[0], date_format),
-                    "end_date" : datetime.strptime(configuration.de_6_semaine_au_stade[1], date_format),
+                    "start_date" : safely_parse_date(safely_parse_None(configuration.de_6_semaine_au_stade)[0], date_format),
+                    "end_date" : safely_parse_date(safely_parse_None(configuration.de_6_semaine_au_stade)[1], date_format),
                     "KC" : 0.7
                 },
                 {
-                    "start_date" : datetime.strptime(configuration.du_stade_a_recolte[0], date_format),
-                    "end_date" : datetime.strptime(configuration.du_stade_a_recolte[1], date_format),
+                    "start_date" : safely_parse_date(safely_parse_None(configuration.du_stade_a_recolte)[0], date_format),
+                    "end_date" : safely_parse_date(safely_parse_None(configuration.du_stade_a_recolte)[1], date_format),
                     "KC" : 1
                 }
             ],
             "Pomme de terre" : [
                 {
-                    "start_date" : datetime.strptime(configuration.Plante_a_50_de_levée[0], date_format),
-                    "end_date" : datetime.strptime(configuration.Plante_a_50_de_levée[1], date_format),
+                    "start_date" : safely_parse_date(safely_parse_None(configuration.Plante_a_50_de_levée)[0], date_format),
+                    "end_date" : safely_parse_date(safely_parse_None(configuration.Plante_a_50_de_levée)[1], date_format),
                     "KC" : 0.4
                 },
                 {
-                    "start_date" : datetime.strptime(configuration.de_50_de_levée_a_50_recouvrement[0], date_format),
-                    "end_date" : datetime.strptime(configuration.de_50_de_levée_a_50_recouvrement[1], date_format),
+                    "start_date" : safely_parse_date(safely_parse_None(configuration.de_50_de_levée_a_50_recouvrement)[0], date_format),
+                    "end_date" : safely_parse_date(safely_parse_None(configuration.de_50_de_levée_a_50_recouvrement)[1], date_format),
                     "KC" : 0.7
                 },
                 {
-                    "start_date" : datetime.strptime(configuration.de_50_recouvrement_a_recouvrement_total[0], date_format),
-                    "end_date" : datetime.strptime(configuration.de_50_recouvrement_a_recouvrement_total[1], date_format),
+                    "start_date" : safely_parse_date(safely_parse_None(configuration.de_50_recouvrement_a_recouvrement_total)[0], date_format),
+                    "end_date" : safely_parse_date(safely_parse_None(configuration.de_50_recouvrement_a_recouvrement_total)[1], date_format),
                     "KC" : 0.9
                 },
                 {
-                    "start_date" : datetime.strptime(configuration.recvroument_total_plus_30_jours[0], date_format),
-                    "end_date" : datetime.strptime(configuration.recvroument_total_plus_30_jours[1], date_format),
+                    "start_date" : safely_parse_date(safely_parse_None(configuration.recvroument_total_plus_30_jours)[0], date_format),
+                    "end_date" : safely_parse_date(safely_parse_None(configuration.recvroument_total_plus_30_jours)[1], date_format),
                     "KC" : 1.05
                 },
                 {
-                    "start_date" : datetime.strptime(configuration.recvroument_total_plus_30_jours_a_debut_saison[0], date_format),
-                    "end_date" : datetime.strptime(configuration.recvroument_total_plus_30_jours_a_debut_saison[1], date_format),
+                    "start_date" : safely_parse_date(safely_parse_None(configuration.recvroument_total_plus_30_jours_a_debut_saison)[0], date_format),
+                    "end_date" : safely_parse_date(safely_parse_None(configuration.recvroument_total_plus_30_jours_a_debut_saison)[1], date_format),
                     "KC" : 1
                 },
                 {
-                    "start_date" : datetime.strptime(configuration.debut_saison_a_maturite[0], date_format),
-                    "end_date" : datetime.strptime(configuration.debut_saison_a_maturite[1], date_format),
+                    "start_date" : safely_parse_date(safely_parse_None(configuration.debut_saison_a_maturite)[0], date_format),
+                    "end_date" : safely_parse_date(safely_parse_None(configuration.debut_saison_a_maturite)[1], date_format),
                     "KC" : 0.8
                 }
             ]
@@ -222,7 +206,7 @@ def bilan_hydrique():
             intervals = plants[plant_name]
 
             for interval in intervals:
-                if interval["start_date"] <= datetime.strptime(date, date_format) <= interval["end_date"]:
+                if interval["start_date"] <= safely_parse_date(date, date_format) <= interval["end_date"]:
                     return interval["KC"]
         return None
 
@@ -257,11 +241,9 @@ def bilan_hydrique():
     daily_data['ETR_PV'] = daily_data['ETP_PV'] * daily_data['KC']
 
 
-    result = {
-        'daily_data' : daily_data
-    }
-
-    return jsonify(result)
+    result = daily_data
+    result_json = result.to_json(orient="records")  # You can use a different orientation if you want
+    return Response(response=result_json, status=200, mimetype="application/json")
 
 if __name__ == "__main__":
     app.run(debug=True, port=666)

@@ -14,30 +14,30 @@ Latitude = 48.8534
 Longitude = 2.3488
 Hauteur_de_linstallation = 4.0
 Taux_de_couverture = 3.0
-Plant_name = "Courgette"
+Plant_name = "Pomme de terre"
 start_date = "2015-05-20"
 end_date = "2015-08-23"
 
 # input dates for pomme de terre:
-Plante_a_50_de_levée = ("2015-05-20", "2015-05-20")
-de_50_de_levée_a_50_recouvrement = ("2015-05-20", "2015-05-20")
-de_50_recouvrement_a_recouvrement_total = ("2015-05-20", "2015-05-20")
-recvroument_total_plus_30_jours = ("2015-05-20", "2015-05-20")
-recvroument_total_plus_30_jours_a_debut_saison = ("2015-05-20", "2015-05-20")
-debut_saison_a_maturite = ("2015-05-20", "2015-05-20")
+Plante_a_50_de_levée = ("2015-05-20", "2015-06-20")
+de_50_de_levée_a_50_recouvrement = ("2015-06-20", "2015-07-20")
+de_50_recouvrement_a_recouvrement_total = ("2015-07-20", "2015-07-30")
+recvroument_total_plus_30_jours = ("2015-07-30", "2015-08-02")
+recvroument_total_plus_30_jours_a_debut_saison = ("2015-08-02", "2015-08-10")
+debut_saison_a_maturite = ("2015-08-10", "2015-08-23")
 
 # input date for courgette 
-plantation_a_fleuraison = ("2015-05-20", "2015-06-20")
-fleuraison_a_mi_recolte = ("2015-06-20", "2015-07-20")
-mi_recolte_fin_recolte = ("2015-07-20", "2015-08-23")
+plantation_a_fleuraison = None
+fleuraison_a_mi_recolte = None
+mi_recolte_fin_recolte = None
 
 # input date for poireaux
-reprise_a_recolte = ("2015-05-20", "2015-05-20")
+reprise_a_recolte = None
 
 # input date for carotte
-de_0_a_6_semaine_apres_semis = ("2015-05-20", "2015-05-20")
-de_6_semaine_au_stade = ("2015-05-20", "2015-05-20")
-du_stade_a_recolte = ("2015-05-20", "2015-05-20")
+de_0_a_6_semaine_apres_semis = None
+de_6_semaine_au_stade = None
+du_stade_a_recolte = None
 
 # Define the URL and parameters
 url = "https://archive-api.open-meteo.com/v1/archive"
@@ -94,6 +94,13 @@ daily_data = df.resample('D').agg({
     'diffuse_radiation': 'sum'
 })
 
+def safely_parse_date(date_string, date_format):
+    return datetime.strptime(date_string, date_format) if date_string is not None else None
+
+def safely_parse_None(my_tuple):
+    
+    return my_tuple if my_tuple is not None else ("2000-01-01", "2000-01-10")
+
 
 def calculate_KC_values(plant_name, date):
     date_format = "%Y-%m-%d"
@@ -101,74 +108,74 @@ def calculate_KC_values(plant_name, date):
     plants = {
         "Courgette" : [
             {
-                "start_date" : datetime.strptime(plantation_a_fleuraison[0], date_format),
-                "end_date" : datetime.strptime(plantation_a_fleuraison[1], date_format),
+                "start_date" : safely_parse_date(safely_parse_None(plantation_a_fleuraison)[0], date_format),
+                "end_date" : safely_parse_date(safely_parse_None(plantation_a_fleuraison)[1], date_format),
                 "KC" : 0.5
             },
             {
-                "start_date" : datetime.strptime(fleuraison_a_mi_recolte[0], date_format),
-                "end_date" : datetime.strptime(fleuraison_a_mi_recolte[1], date_format),
+                "start_date" : safely_parse_date(safely_parse_None(fleuraison_a_mi_recolte)[0], date_format),
+                "end_date" : safely_parse_date(safely_parse_None(fleuraison_a_mi_recolte)[1], date_format),
                 "KC" : 1
             },
             {
-                "start_date" : datetime.strptime(mi_recolte_fin_recolte[0], date_format),
-                "end_date" : datetime.strptime(mi_recolte_fin_recolte[1], date_format),
+                "start_date" : safely_parse_date(safely_parse_None(mi_recolte_fin_recolte)[0], date_format),
+                "end_date" : safely_parse_date(safely_parse_None(mi_recolte_fin_recolte)[1], date_format),
                 "KC" : 0.7
             }
         ],
         "Poireau" : [
             {
-                "start_date" : datetime.strptime(reprise_a_recolte[0], date_format),
-                "end_date" : datetime.strptime(reprise_a_recolte[1], date_format),
+                "start_date" : safely_parse_date(safely_parse_None(reprise_a_recolte)[0], date_format),
+                "end_date" : safely_parse_date(safely_parse_None(reprise_a_recolte)[1], date_format),
                 "KC" : 0.7
             }
         ],
         "Carotte" : [
             {
-                "start_date" : datetime.strptime(de_0_a_6_semaine_apres_semis[0], date_format),
-                "end_date" : datetime.strptime(de_0_a_6_semaine_apres_semis[1], date_format),
+                "start_date" : safely_parse_date(safely_parse_None(de_0_a_6_semaine_apres_semis)[0], date_format),
+                "end_date" : safely_parse_date(safely_parse_None(de_0_a_6_semaine_apres_semis)[1], date_format),
                 "KC" : 0.4
             },
             {
-                "start_date" : datetime.strptime(de_6_semaine_au_stade[0], date_format),
-                "end_date" : datetime.strptime(de_6_semaine_au_stade[1], date_format),
+                "start_date" : safely_parse_date(safely_parse_None(de_6_semaine_au_stade)[0], date_format),
+                "end_date" : safely_parse_date(safely_parse_None(de_6_semaine_au_stade)[1], date_format),
                 "KC" : 0.7
             },
             {
-                "start_date" : datetime.strptime(du_stade_a_recolte[0], date_format),
-                "end_date" : datetime.strptime(du_stade_a_recolte[1], date_format),
+                "start_date" : safely_parse_date(safely_parse_None(du_stade_a_recolte)[0], date_format),
+                "end_date" : safely_parse_date(safely_parse_None(du_stade_a_recolte)[1], date_format),
                 "KC" : 1
             }
         ],
         "Pomme de terre" : [
             {
-                "start_date" : datetime.strptime(Plante_a_50_de_levée[0], date_format),
-                "end_date" : datetime.strptime(Plante_a_50_de_levée[1], date_format),
+                "start_date" : safely_parse_date(safely_parse_None(Plante_a_50_de_levée)[0], date_format),
+                "end_date" : safely_parse_date(safely_parse_None(Plante_a_50_de_levée)[1], date_format),
                 "KC" : 0.4
             },
             {
-                "start_date" : datetime.strptime(de_50_de_levée_a_50_recouvrement[0], date_format),
-                "end_date" : datetime.strptime(de_50_de_levée_a_50_recouvrement[1], date_format),
+                "start_date" : safely_parse_date(safely_parse_None(de_50_de_levée_a_50_recouvrement)[0], date_format),
+                "end_date" : safely_parse_date(safely_parse_None(de_50_de_levée_a_50_recouvrement)[1], date_format),
                 "KC" : 0.7
             },
             {
-                "start_date" : datetime.strptime(de_50_recouvrement_a_recouvrement_total[0], date_format),
-                "end_date" : datetime.strptime(de_50_recouvrement_a_recouvrement_total[1], date_format),
+                "start_date" : safely_parse_date(safely_parse_None(de_50_recouvrement_a_recouvrement_total)[0], date_format),
+                "end_date" : safely_parse_date(safely_parse_None(de_50_recouvrement_a_recouvrement_total)[1], date_format),
                 "KC" : 0.9
             },
             {
-                "start_date" : datetime.strptime(recvroument_total_plus_30_jours[0], date_format),
-                "end_date" : datetime.strptime(recvroument_total_plus_30_jours[1], date_format),
+                "start_date" : safely_parse_date(safely_parse_None(recvroument_total_plus_30_jours)[0], date_format),
+                "end_date" : safely_parse_date(safely_parse_None(recvroument_total_plus_30_jours)[1], date_format),
                 "KC" : 1.05
             },
             {
-                "start_date" : datetime.strptime(recvroument_total_plus_30_jours_a_debut_saison[0], date_format),
-                "end_date" : datetime.strptime(recvroument_total_plus_30_jours_a_debut_saison[1], date_format),
+                "start_date" : safely_parse_date(safely_parse_None(recvroument_total_plus_30_jours_a_debut_saison)[0], date_format),
+                "end_date" : safely_parse_date(safely_parse_None(recvroument_total_plus_30_jours_a_debut_saison)[1], date_format),
                 "KC" : 1
             },
             {
-                "start_date" : datetime.strptime(debut_saison_a_maturite[0], date_format),
-                "end_date" : datetime.strptime(debut_saison_a_maturite[1], date_format),
+                "start_date" : safely_parse_date(safely_parse_None(debut_saison_a_maturite)[0], date_format),
+                "end_date" : safely_parse_date(safely_parse_None(debut_saison_a_maturite)[1], date_format),
                 "KC" : 0.8
             }
         ]
@@ -178,7 +185,7 @@ def calculate_KC_values(plant_name, date):
         intervals = plants[plant_name]
 
         for interval in intervals:
-            if interval["start_date"] <= datetime.strptime(date, date_format) <= interval["end_date"]:
+            if interval["start_date"] <= safely_parse_date(date, date_format) <= interval["end_date"]:
                 return interval["KC"]
     return None
 
