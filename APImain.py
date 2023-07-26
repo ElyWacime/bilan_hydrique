@@ -7,7 +7,8 @@ from flask import Flask, request, jsonify
 import logging
 from logging.handlers import RotatingFileHandler
 from typing import Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, validator
+from typing import Optional, Tuple
 
 app = Flask(__name__)
 
@@ -22,39 +23,61 @@ if not app.debug:
 class Configuration(BaseModel):
 
     # Input values:
-    Texture_du_sol = str
-    Densité_apparente_des_motes = float
-    Densité_apparente_du_sol = float
-    Profondeur_des_racines = float
-    Pierrosité = float
-    Latitude = 48.8534
-    Longitude = 2.3488
-    Hauteur_de_linstallation = 4.0
-    Taux_de_couverture = 3.0
-    Plant_name = "Courgette"
-    start_date = "2015-05-20"
-    end_date = "2015-08-23"
+    Texture_du_sol : str
+    Densité_apparente_des_motes : float
+    Densité_apparente_du_sol : float
+    Profondeur_des_racines : float
+    Pierrosité : float
+    Latitude : float
+    Longitude : float
+    Hauteur_de_linstallation : float
+    Taux_de_couverture : float
+    Plant_name : str
+    start_date : str
+    end_date : str
 
     # input dates for pomme de terre:
-    Plante_a_50_de_levée = ("2015-05-20", "2015-05-20")
-    de_50_de_levée_a_50_recouvrement = ("2015-05-20", "2015-05-20")
-    de_50_recouvrement_a_recouvrement_total = ("2015-05-20", "2015-05-20")
-    recvroument_total_plus_30_jours = ("2015-05-20", "2015-05-20")
-    recvroument_total_plus_30_jours_a_debut_saison = ("2015-05-20", "2015-05-20")
-    debut_saison_a_maturite = ("2015-05-20", "2015-05-20")
+    Plante_a_50_de_levée: Optional[Tuple] = None
+    de_50_de_levée_a_50_recouvrement: Optional[Tuple] = None
+    de_50_recouvrement_a_recouvrement_total: Optional[Tuple] = None
+    recvroument_total_plus_30_jours: Optional[Tuple] = None
+    recvroument_total_plus_30_jours_a_debut_saison: Optional[Tuple] = None
+    debut_saison_a_maturite: Optional[Tuple] = None
 
     # input date for courgette 
-    plantation_a_fleuraison = ("2015-05-20", "2015-06-20")
-    fleuraison_a_mi_recolte = ("2015-06-20", "2015-07-20")
-    mi_recolte_fin_recolte = ("2015-07-20", "2015-08-23")
+    plantation_a_fleuraison: Optional[Tuple] = None
+    fleuraison_a_mi_recolte: Optional[Tuple] = None
+    mi_recolte_fin_recolte: Optional[Tuple] = None
 
     # input date for poireaux
-    reprise_a_recolte = ("2015-05-20", "2015-05-20")
+    reprise_a_recolte: Optional[Tuple] = None
 
     # input date for carotte
-    de_0_a_6_semaine_apres_semis = ("2015-05-20", "2015-05-20")
-    de_6_semaine_au_stade = ("2015-05-20", "2015-05-20")
-    du_stade_a_recolte = ("2015-05-20", "2015-05-20")
+    de_0_a_6_semaine_apres_semis: Optional[Tuple] = None
+    de_6_semaine_au_stade: Optional[Tuple] = None
+    du_stade_a_recolte: Optional[Tuple] = None
+
+    
+    @validator('*', always=True)
+    def check_dates_for_plant(cls, v, values, field):
+        # List of fields required for each plant
+        required_fields_for_plants = {
+            'pomme_de_terre': [
+                'Plante_a_50_de_levée', 'de_50_de_levée_a_50_recouvrement',
+                'de_50_recouvrement_a_recouvrement_total', 'recvroument_total_plus_30_jours',
+                'recvroument_total_plus_30_jours_a_debut_saison', 'debut_saison_a_maturite'
+            ],
+            'courgette': [
+                'plantation_a_fleuraison', 'fleuraison_a_mi_recolte', 'mi_recolte_fin_recolte'
+            ],
+            'poireaux': ['reprise_a_recolte'],
+            'carotte': ['de_0_a_6_semaine_apres_semis', 'de_6_semaine_au_stade', 'du_stade_a_recolte']
+        }
+        if 'Plant_name' in values:
+            required_fields = required_fields_for_plants.get(values['Plant_name'], [])
+            if field.alias in required_fields and v is None:
+                raise ValueError(f'{field.alias} is required when Plant_name is {values["Plant_name"]}')
+        return v
 
 
 @app.route('/bilan_hydrique', methods=['POST'])
@@ -63,7 +86,6 @@ def bilan_hydrique():
     configuration_data = request.get_json()
     configuration = Configuration(**configuration_data)
 
-    # Define the URL and parameters
     url = "https://archive-api.open-meteo.com/v1/archive"
     params = {
         "latitude": configuration.Latitude,
@@ -76,10 +98,8 @@ def bilan_hydrique():
         "max": "2015-08-23"
     }
 
-    # Make the API request
     response = requests.get(url, params=params)
 
-    # Load the response into a Python dictionary
     data = json.loads(response.text)
 
     # Extract the lists from the 'hourly' dictionary
@@ -237,10 +257,11 @@ def bilan_hydrique():
     daily_data['ETR_PV'] = daily_data['ETP_PV'] * daily_data['KC']
 
 
-    # Create the bilan_hydrique sheet
+    result = {
+        'daily_data' : daily_data
+    }
 
+    return jsonify(result)
 
-    print(daily_data)
-
-    # Save the the result into an Excel file
-    daily_data.to_excel("output.xlsx", engine='xlsxwriter')
+if __name__ == "__main__":
+    app.run(debug=True, port=666)
