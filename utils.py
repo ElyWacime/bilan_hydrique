@@ -143,9 +143,39 @@ teneurSol = {
             }},
     },
     "Limon" : {
-        (1.40, 1.50): [1.45, 1.35],
-        (1.51, 1.60): [1.55, 1.45],
-        (1.61, 1.70): [1.65, 1.55],
+        (1.40, 1.50): {
+            1.45:{
+                "capacité au champ": 0.305,
+                "point de flétrissement": 0.155,
+                "RU": 0.15
+            },
+            1.35:{
+                "capacité au champ": 0.284,
+                "point de flétrissement": 0.145,
+                "RU": 0.139
+            }},
+        (1.51, 1.60): {
+            1.55:{
+                "capacité au champ": 0.302,
+                "point de flétrissement": 0.163,
+                "RU": 0.139
+            },
+            1.45:{
+                "capacité au champ": 0.283,
+                "point de flétrissement": 0.152,
+                "RU": 0.131
+            }},
+        (1.61, 1.70): {
+            1.65:{
+                "capacité au champ": 0.32,
+                "point de flétrissement": 0.173,
+                "RU": 0.147
+            },
+            1.55:{
+                "capacité au champ": 0.3,
+                "point de flétrissement": 0.163,
+                "RU": 0.137
+            }},
     },
     "Limon salbleux" : {
         (1.50, 1.60): [1.55, 1.45],
