@@ -1,8 +1,0 @@
-3 senario:
-	1- senario:
-		connais pas densité aparente => on récupaire la médiane
-	
-	2- senario:
-		connais ça densité.
-		1- choisir l'interval de densité des mottes
-		2- on fait la valeur absolue de la differance de la dencité de l'horizon avec les 2 valeur du tableau et prend la plue petite

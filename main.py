@@ -3,6 +3,7 @@ import json
 import pandas as pd
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
+from utils import teneurSol
 
 # Input values:
 Texture_du_sol = str
