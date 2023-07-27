@@ -10,7 +10,7 @@ Texture_du_sol = "Limon sableux"
 Densité_apparente_des_motes_Bool = False
 Densité_apparente_des_motes = 1.68
 Densité_apparente_du_sol = 1.68
-Profondeur_des_racines = float
+Profondeur_des_racines = 1.23
 Pierrosité = float
 Latitude = 48.8534
 Longitude = 2.3488
@@ -236,6 +236,7 @@ if Densité_apparente_des_motes_Bool:
             if absolute_values[0] < absolute_values[1]:
                 Teneur_eau_sol = teneurSol[Texture_du_sol][keys][keys_float[0]]["RU"]
                 print("teneur eau sol: ",Teneur_eau_sol)
+                
             else:
                 Teneur_eau_sol = teneurSol[Texture_du_sol][keys][keys_float[1]]["RU"]
                 print("teneur eau sol: ",Teneur_eau_sol)
@@ -247,6 +248,8 @@ else:
     RU_mediane = sum(RU_list) / len(RU_list) + 1
     print("médiane: ",RU_mediane)
 
+Reserve_Utile_maximun = (Teneur_eau_sol * 10000 / 1000) * Profondeur_des_racines * (1 - (Pierrosité / 100))
+Reserve_dificilement_utilisable = 1/3*Reserve_Utile_maximun
 
 # Save the the result into an Excel file
 daily_data.to_excel("output.xlsx", engine='xlsxwriter')
