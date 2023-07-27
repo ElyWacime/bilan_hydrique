@@ -6,9 +6,10 @@ from dateutil.relativedelta import relativedelta
 from utils import teneurSol
 
 # Input values:
-Texture_du_sol = str
-Densité_apparente_des_motes = float
-Densité_apparente_du_sol = float
+Texture_du_sol = "Limon sableux"
+Densité_apparente_des_motes_Bool = False
+Densité_apparente_des_motes = 1.68
+Densité_apparente_du_sol = 1.68
 Profondeur_des_racines = float
 Pierrosité = float
 Latitude = 48.8534
@@ -221,10 +222,31 @@ daily_data['ETP_PV'] = 0.013*(daily_data['lg_mod']+50)*daily_data['t_mod']/(dail
 daily_data['ETR_PV'] = daily_data['ETP_PV'] * daily_data['KC']
 
 
-# Create the bilan_hydrique sheet
 
+# calcul Réserve Utile Maximum
+if Densité_apparente_des_motes_Bool:
+    for keys in teneurSol[Texture_du_sol]:
+        if keys[0] <= Densité_apparente_des_motes <= keys[1]:
+            absolute_values = []
+            keys_float = []
+            for key_float in teneurSol[Texture_du_sol][keys]:
+                absolute_difference = abs(key_float - Densité_apparente_des_motes)
+                absolute_values.append(absolute_difference)
+                keys_float.append(key_float)
+            if absolute_values[0] < absolute_values[1]:
+                Teneur_eau_sol = teneurSol[Texture_du_sol][keys][keys_float[0]]["RU"]
+                print("teneur eau sol: ",Teneur_eau_sol)
+            else:
+                Teneur_eau_sol = teneurSol[Texture_du_sol][keys][keys_float[1]]["RU"]
+                print("teneur eau sol: ",Teneur_eau_sol)
+else:
+    RU_list = []
+    for keys in teneurSol[Texture_du_sol]:
+        for key_float in teneurSol[Texture_du_sol][keys]:
+            RU_list.append(teneurSol[Texture_du_sol][keys][key_float]["RU"])
+    RU_mediane = sum(RU_list) / len(RU_list) + 1
+    print("médiane: ",RU_mediane)
 
-print(daily_data)
 
 # Save the the result into an Excel file
 daily_data.to_excel("output.xlsx", engine='xlsxwriter')

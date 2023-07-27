@@ -177,7 +177,7 @@ teneurSol = {
                 "RU": 0.137
             }},
     },
-    "Limon salbleux" : {
+    "Limon sableux" : {
         (1.50, 1.60): {
             1.55:{
                 "capacité au champ": 0.259,
