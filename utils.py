@@ -178,20 +178,110 @@ teneurSol = {
             }},
     },
     "Limon salbleux" : {
-        (1.50, 1.60): [1.55, 1.45],
-        (1.61, 1.70): [1.65, 1.55],
-        (1.71, 1.80): [1.75, 1.65],
+        (1.50, 1.60): {
+            1.55:{
+                "capacité au champ": 0.259,
+                "point de flétrissement": 0.16,
+                "RU": 0.099
+            },
+            1.45:{
+                "capacité au champ": 0.242,
+                "point de flétrissement": 0.149,
+                "RU": 0.093
+            }},
+        (1.61, 1.70): {
+            1.65:{
+                "capacité au champ": 0.29,
+                "point de flétrissement": 0.144,
+                "RU": 0.146
+            },
+            1.55:{
+                "capacité au champ": 0.273,
+                "point de flétrissement": 0.135,
+                "RU": 0.138
+            }},
+        (1.71, 1.80): {
+            1.75:{
+                "capacité au champ": 0.292,
+                "point de flétrissement": 0.137,
+                "RU": 0.155
+            },
+            1.65:{
+                "capacité au champ": 0.276,
+                "point de flétrissement": 0.129,
+                "RU": 0.147
+            }},
     },
     "Limon trés sableux" : {
-        (1.50, 1.70): [1.6, 1.5],
-        (1.71, 1.90): [1.8, 1.7],
+        (1.50, 1.70): {
+            1.6:{
+                "capacité au champ": 0.246,
+                "point de flétrissement": 0.16,
+                "RU": 0.086
+            },
+            1.5:{
+                "capacité au champ": 0.231,
+                "point de flétrissement": 0.15,
+                "RU": 0.81
+            }},
+        (1.71, 1.90): {
+            1.8:{
+                "capacité au champ": 0.27,
+                "point de flétrissement": 0.16,
+                "RU": 0.11
+            },
+            1.7:{
+                "capacité au champ": 0.255,
+                "point de flétrissement": 0.151,
+                "RU": 0.104
+            }},
     },
     "Sable argilo-limoneux" : {
-        (1.60, 1.75): [1.68, 1.58],
-        (1.76, 1.90): [1.83, 1.73],
+        (1.60, 1.75): {
+            1.68:{
+                "capacité au champ": 0.212,
+                "point de flétrissement": 0.121,
+                "RU": 0.091
+            },
+            1.58:{
+                "capacité au champ": 0.199,
+                "point de flétrissement": 0.144,
+                "RU": 0.055
+            }},
+        (1.76, 1.90): {
+            1.83:{
+                "capacité au champ": 0.255,
+                "point de flétrissement": 0.119,
+                "RU": 0.106
+            },
+            1.73:{
+                "capacité au champ": 0.213,
+                "point de flétrissement": 0.113,
+                "RU": 0.1
+            }},
     },
     "Sable": {
-        (1.60, 1.70): [1.65, 1.55],
-        (1.71, 1.80): [1.75, 1.65],
+        (1.60, 1.70): {
+            1.65:{
+                "capacité au champ": 0.14,
+                "point de flétrissement": 0.061,
+                "RU": 0.79
+            },
+            1.55:{
+                "capacité au champ": 0.132,
+                "point de flétrissement": 0.057,
+                "RU": 0.075
+            }},
+        (1.71, 1.80): {
+            1.75:{
+                "capacité au champ": 0.107,
+                "point de flétrissement": 0.058,
+                "RU": 0.049
+            },
+            1.65:{
+                "capacité au champ": 0.101,
+                "point de flétrissement": 0.055,
+                "RU": 0.046
+            }},
     }
 }
