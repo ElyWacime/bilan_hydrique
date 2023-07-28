@@ -258,8 +258,12 @@ daily_data["RDU"] = Reserve_dificilement_utilisable
 daily_data["capacité au champs"] = Reserve_Utile_maximun
 
 
-# Add eau utile & irrigation columns
+# Add eau utile & irrigation columns & eau_utile_PV and irrigation_PV
+
 # irrigation = 2 / 3 * D2 if (K2 + G2 - J2) < 2 / 3 * D2 else 0
+# eau_utile_PV = calculate_value(P2, G2, Q2, O2, C2, D2)
+# irrigation_PV = 2 / 3 * D3 if (P3 + G3 - O3) < 2 / 3 * D3 else 0
+
 def calculate_eau_utile_value(K2, G2, L2, J2, C2, D2):
     value = K2 + G2 + L2 - J2
 
@@ -273,6 +277,7 @@ def calculate_eau_utile_value(K2, G2, L2, J2, C2, D2):
         return value * (K2 / D2)
 
 daily_data.loc[start_date, "eau_utile"] = daily_data.loc[start_date,"capacité au champs"]
+daily_data.loc[start_date, "eau_utile_pv"] = daily_data.loc[start_date,"capacité au champs"]
 
 for index, row in daily_data.iterrows():
     if daily_data.loc[index, "eau_utile"] == daily_data.loc[start_date,"capacité au champs"]:
@@ -281,7 +286,11 @@ for index, row in daily_data.iterrows():
         previous_date = (index - pd.DateOffset(days=1)).strftime('%Y-%m-%d')
         daily_data.loc[previous_date, "irrigation"] = 2/3 * daily_data.loc[previous_date, "RDU"] if (daily_data.loc[previous_date, "eau_utile"] + daily_data.loc[previous_date, "precipitation"] - daily_data.loc[previous_date, "ETR"]) < 2/3 * daily_data.loc[previous_date, "RDU"] else 0
         daily_data.loc[index, "eau_utile"] = calculate_eau_utile_value(daily_data.loc[previous_date, "eau_utile"], daily_data.loc[previous_date, "precipitation"], daily_data.loc[previous_date, "irrigation"], daily_data.loc[previous_date, "ETR"], daily_data.loc[previous_date, "capacité au champs"], daily_data.loc[previous_date, "RDU"])
+
+        daily_data.loc[previous_date, "irrigation_pv"] = 2/3 * daily_data.loc[previous_date, "RDU"] if (daily_data.loc[previous_date, "eau_utile_pv"] + daily_data.loc[previous_date, "precipitation"] - daily_data.loc[previous_date, "ETR_PV"]) < 2/3 * daily_data.loc[previous_date, "RDU"] else 0
+        daily_data.loc[index, "eau_utile_pv"] = calculate_eau_utile_value(daily_data.loc[previous_date, "eau_utile_pv"], daily_data.loc[previous_date, "precipitation"], daily_data.loc[previous_date, "irrigation_pv"], daily_data.loc[previous_date, "ETR_PV"], daily_data.loc[previous_date, "capacité au champs"], daily_data.loc[previous_date, "RDU"])
 daily_data.loc[end_date, "irrigation"] = 2/3 * daily_data.loc[end_date, "RDU"] if (daily_data.loc[end_date, "eau_utile"] + daily_data.loc[end_date, "precipitation"] - daily_data.loc[end_date, "ETR"]) < 2/3 * daily_data.loc[end_date, "RDU"] else 0       
+daily_data.loc[end_date, "irrigation_pv"] = 2/3 * daily_data.loc[end_date, "RDU"] if (daily_data.loc[end_date, "eau_utile_pv"] + daily_data.loc[end_date, "precipitation"] - daily_data.loc[end_date, "ETR_PV"]) < 2/3 * daily_data.loc[end_date, "RDU"] else 0
 
 #print(Reserve_Utile_maximun, Reserve_dificilement_utilisable)
 
