@@ -5,18 +5,18 @@ from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 from utils import teneurSol
 
-# Input values:
+# ************ Input values: **************
 Texture_du_sol = "Limon sableux"
-Densité_apparente_des_motes_Bool = False
+Densité_apparente_des_motes_Bool = True
 Densité_apparente_des_motes = 1.68
 Densité_apparente_du_sol = 1.68
 Profondeur_des_racines = 1.23
-Pierrosité = float
+Pierrosité = 1.23
 Latitude = 48.8534
 Longitude = 2.3488
 Hauteur_de_linstallation = 4.0
 Taux_de_couverture = 3.0
-Plant_name = "Pomme de terre"
+Plant_name = "Courgette"
 start_date = "2015-05-20"
 end_date = "2015-08-23"
 
@@ -29,9 +29,9 @@ recvroument_total_plus_30_jours_a_debut_saison = ("2015-08-02", "2015-08-10")
 debut_saison_a_maturite = ("2015-08-10", "2015-08-23")
 
 # input date for courgette 
-plantation_a_fleuraison = None
-fleuraison_a_mi_recolte = None
-mi_recolte_fin_recolte = None
+plantation_a_fleuraison = ("2015-05-20", "2015-06-20")
+fleuraison_a_mi_recolte = ("2015-06-20", "2015-08-10")
+mi_recolte_fin_recolte = ("2015-08-10", "2015-08-23")
 
 # input date for poireaux
 reprise_a_recolte = None
@@ -41,7 +41,8 @@ de_0_a_6_semaine_apres_semis = None
 de_6_semaine_au_stade = None
 du_stade_a_recolte = None
 
-# Define the URL and parameters
+# ***********________**************
+
 url = "https://archive-api.open-meteo.com/v1/archive"
 params = {
     "latitude": Latitude,
@@ -50,14 +51,12 @@ params = {
     "end_date": end_date,
     "hourly": "temperature_2m,precipitation,direct_radiation,diffuse_radiation",
     "timezone": "auto",
-    "min": "2015-05-20",
-    "max": "2015-08-23"
+    "min": start_date,
+    "max": end_date
 }
 
-# Make the API request
 response = requests.get(url, params=params)
 
-# Load the response into a Python dictionary
 data = json.loads(response.text)
 
 # Extract the lists from the 'hourly' dictionary
@@ -99,8 +98,7 @@ daily_data = df.resample('D').agg({
 def safely_parse_date(date_string, date_format):
     return datetime.strptime(date_string, date_format) if date_string is not None else None
 
-def safely_parse_None(my_tuple):
-    
+def safely_parse_None(my_tuple):    
     return my_tuple if my_tuple is not None else ("2000-01-01", "2000-01-10")
 
 
@@ -223,7 +221,7 @@ daily_data['ETR_PV'] = daily_data['ETP_PV'] * daily_data['KC']
 
 
 
-# calcul Réserve Utile Maximum
+# calcul Réserve Utile Maximum 
 if Densité_apparente_des_motes_Bool:
     for keys in teneurSol[Texture_du_sol]:
         if keys[0] <= Densité_apparente_des_motes <= keys[1]:
@@ -235,21 +233,55 @@ if Densité_apparente_des_motes_Bool:
                 keys_float.append(key_float)
             if absolute_values[0] < absolute_values[1]:
                 Teneur_eau_sol = teneurSol[Texture_du_sol][keys][keys_float[0]]["RU"]
-                print("teneur eau sol: ",Teneur_eau_sol)
+                Reserve_Utile_maximun = (Teneur_eau_sol * 10000 / 1000) * Profondeur_des_racines * (1 - (Pierrosité / 100))
+                Reserve_dificilement_utilisable = 1 / 3 * Reserve_Utile_maximun
                 
             else:
                 Teneur_eau_sol = teneurSol[Texture_du_sol][keys][keys_float[1]]["RU"]
-                print("teneur eau sol: ",Teneur_eau_sol)
+                Reserve_Utile_maximun = (Teneur_eau_sol * 10000 / 1000) * Profondeur_des_racines * (1 - (Pierrosité / 100))
+                Reserve_dificilement_utilisable = 1 / 3 * Reserve_Utile_maximun
+                
 else:
     RU_list = []
     for keys in teneurSol[Texture_du_sol]:
         for key_float in teneurSol[Texture_du_sol][keys]:
             RU_list.append(teneurSol[Texture_du_sol][keys][key_float]["RU"])
     RU_mediane = sum(RU_list) / len(RU_list) + 1
-    print("médiane: ",RU_mediane)
+    Reserve_Utile_maximun = (RU_mediane * 10000 / 1000) * Profondeur_des_racines * (1 - (Pierrosité / 100))
+    Reserve_dificilement_utilisable = 1 / 3 * Reserve_Utile_maximun
+    
 
-Reserve_Utile_maximun = (Teneur_eau_sol * 10000 / 1000) * Profondeur_des_racines * (1 - (Pierrosité / 100))
-Reserve_dificilement_utilisable = 1/3*Reserve_Utile_maximun
+# add RDU column
+daily_data["RDU"] = Reserve_dificilement_utilisable
+
+# Add capacité au champ column
+daily_data["capacité au champs"] = Reserve_Utile_maximun
+
+# Add eau utile column
+def calculate_eau_utile_value(K2, G2, L2, J2, C2, D2):
+    value = K2 + G2 + L2 - J2
+
+    if value >= C2:
+        return C2
+    elif value > D2:
+        return value
+    elif value > 0:
+        return value * (K2 / D2)
+    else:
+        return value * (K2 / D2)
+
+daily_data.loc[start_date, "eau_utile"] = daily_data.loc[start_date,"capacité au champs"]
+
+for index, row in daily_data.iterrows():
+    if daily_data.loc[index, "eau_utile"] == daily_data.loc[start_date,"capacité au champs"]:
+        continue
+    else:
+        previous_date = (index - pd.DateOffset(days=1)).strftime('%Y-%m-%d')
+        daily_data.loc[index, "eau_utile"] = calculate_eau_utile_value(daily_data.loc[previous_date, "eau_utile"], daily_data.loc[previous_date, "precipitation"])
+
+#print(Reserve_Utile_maximun, Reserve_dificilement_utilisable)
 
 # Save the the result into an Excel file
 daily_data.to_excel("output.xlsx", engine='xlsxwriter')
+
+print(daily_data.loc[end_date, 'RDU'])
