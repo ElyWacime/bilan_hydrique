@@ -10,12 +10,12 @@ Texture_du_sol = "Limon sableux"
 Densité_apparente_des_motes_Bool = True
 Densité_apparente_des_motes = 1.68
 Densité_apparente_du_sol = 1.68
-Profondeur_des_racines = 1.23
-Pierrosité = 1.23
+Profondeur_des_racines = 50
+Pierrosité = 6.3
 Latitude = 48.8534
 Longitude = 2.3488
-Hauteur_de_linstallation = 4.0
-Taux_de_couverture = 3.0
+Hauteur_de_linstallation = 2
+Taux_de_couverture = 25
 Plant_name = "Courgette"
 start_date = "2015-05-20"
 end_date = "2015-08-23"
@@ -257,7 +257,9 @@ daily_data["RDU"] = Reserve_dificilement_utilisable
 # Add capacité au champ column
 daily_data["capacité au champs"] = Reserve_Utile_maximun
 
-# Add eau utile column
+
+# Add eau utile & irrigation columns
+# irrigation = 2 / 3 * D2 if (K2 + G2 - J2) < 2 / 3 * D2 else 0
 def calculate_eau_utile_value(K2, G2, L2, J2, C2, D2):
     value = K2 + G2 + L2 - J2
 
@@ -277,11 +279,11 @@ for index, row in daily_data.iterrows():
         continue
     else:
         previous_date = (index - pd.DateOffset(days=1)).strftime('%Y-%m-%d')
-        daily_data.loc[index, "eau_utile"] = calculate_eau_utile_value(daily_data.loc[previous_date, "eau_utile"], daily_data.loc[previous_date, "precipitation"])
+        daily_data.loc[previous_date, "irrigation"] = 2/3 * daily_data.loc[previous_date, "RDU"] if (daily_data.loc[previous_date, "eau_utile"] + daily_data.loc[previous_date, "precipitation"] - daily_data.loc[previous_date, "ETR"]) < 2/3 * daily_data.loc[previous_date, "RDU"] else 0
+        daily_data.loc[index, "eau_utile"] = calculate_eau_utile_value(daily_data.loc[previous_date, "eau_utile"], daily_data.loc[previous_date, "precipitation"], daily_data.loc[previous_date, "irrigation"], daily_data.loc[previous_date, "ETR"], daily_data.loc[previous_date, "capacité au champs"], daily_data.loc[previous_date, "RDU"])
+daily_data.loc[end_date, "irrigation"] = 2/3 * daily_data.loc[end_date, "RDU"] if (daily_data.loc[end_date, "eau_utile"] + daily_data.loc[end_date, "precipitation"] - daily_data.loc[end_date, "ETR"]) < 2/3 * daily_data.loc[end_date, "RDU"] else 0       
 
 #print(Reserve_Utile_maximun, Reserve_dificilement_utilisable)
 
 # Save the the result into an Excel file
 daily_data.to_excel("output.xlsx", engine='xlsxwriter')
-
-print(daily_data.loc[end_date, 'RDU'])
