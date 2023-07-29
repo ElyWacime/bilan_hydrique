@@ -9,6 +9,7 @@ from logging.handlers import RotatingFileHandler
 from typing import Optional
 from pydantic import BaseModel, Field, validator
 from typing import Optional, Tuple
+from utils import teneurSol
 
 app = Flask(__name__)
 
@@ -24,6 +25,7 @@ class Configuration(BaseModel):
 
     # Input values:
     Texture_du_sol : str
+    Densité_apparente_des_motes_Bool = bool
     Densité_apparente_des_motes : float
     Densité_apparente_du_sol : float
     Profondeur_des_racines : float
@@ -240,9 +242,81 @@ def bilan_hydrique():
     # Add ETR_PV column
     daily_data['ETR_PV'] = daily_data['ETP_PV'] * daily_data['KC']
 
+    # calcul Réserve Utile Maximum 
+    if configuration.Densité_apparente_des_motes_Bool:
+        for keys in teneurSol[configuration.Texture_du_sol]:
+            if keys[0] <= configuration.Densité_apparente_des_motes <= keys[1]:
+                absolute_values = []
+                keys_float = []
+                for key_float in teneurSol[configuration.Texture_du_sol][keys]:
+                    absolute_difference = abs(key_float - configuration.Densité_apparente_des_motes)
+                    absolute_values.append(absolute_difference)
+                    keys_float.append(key_float)
+                if absolute_values[0] < absolute_values[1]:
+                    Teneur_eau_sol = teneurSol[configuration.Texture_du_sol][keys][keys_float[0]]["RU"]
+                    Reserve_Utile_maximun = (Teneur_eau_sol * 10000 / 1000) * configuration.Profondeur_des_racines * (1 - (configuration.Pierrosité / 100))
+                    Reserve_dificilement_utilisable = 1 / 3 * Reserve_Utile_maximun
+                    
+                else:
+                    Teneur_eau_sol = teneurSol[configuration.Texture_du_sol][keys][keys_float[1]]["RU"]
+                    Reserve_Utile_maximun = (Teneur_eau_sol * 10000 / 1000) * configuration.Profondeur_des_racines * (1 - (configuration.Pierrosité / 100))
+                    Reserve_dificilement_utilisable = 1 / 3 * Reserve_Utile_maximun
+                    
+    else:
+        RU_list = []
+        for keys in teneurSol[configuration.Texture_du_sol]:
+            for key_float in teneurSol[configuration.Texture_du_sol][keys]:
+                RU_list.append(teneurSol[configuration.Texture_du_sol][keys][key_float]["RU"])
+        RU_mediane = sum(RU_list) / len(RU_list) + 1
+        Reserve_Utile_maximun = (RU_mediane * 10000 / 1000) * configuration.Profondeur_des_racines * (1 - (configuration.Pierrosité / 100))
+        Reserve_dificilement_utilisable = 1 / 3 * Reserve_Utile_maximun
+        
+
+    # add RDU column
+    daily_data["RDU"] = Reserve_dificilement_utilisable
+
+    # Add capacité au champ column
+    daily_data["capacité au champs"] = Reserve_Utile_maximun
+
+
+    # Add eau utile & irrigation columns & eau_utile_PV and irrigation_PV
+
+    # irrigation = 2 / 3 * D2 if (K2 + G2 - J2) < 2 / 3 * D2 else 0
+    # eau_utile_PV = calculate_value(P2, G2, Q2, O2, C2, D2)
+    # irrigation_PV = 2 / 3 * D3 if (P3 + G3 - O3) < 2 / 3 * D3 else 0
+
+    def calculate_eau_utile_value(K2, G2, L2, J2, C2, D2):
+        value = K2 + G2 + L2 - J2
+
+        if value >= C2:
+            return C2
+        elif value > D2:
+            return value
+        elif value > 0:
+            return value * (K2 / D2)
+        else:
+            return value * (K2 / D2)
+
+    daily_data.loc[configuration.start_date, "eau_utile"] = daily_data.loc[configuration.start_date,"capacité au champs"]
+    daily_data.loc[configuration.start_date, "eau_utile_pv"] = daily_data.loc[configuration.start_date,"capacité au champs"]
+
+    for index, row in daily_data.iterrows():
+        if daily_data.loc[index, "eau_utile"] == daily_data.loc[configuration.start_date,"capacité au champs"]:
+            continue
+        else:
+            previous_date = (index - pd.DateOffset(days=1)).strftime('%Y-%m-%d')
+            daily_data.loc[previous_date, "irrigation"] = 2/3 * daily_data.loc[previous_date, "RDU"] if (daily_data.loc[previous_date, "eau_utile"] + daily_data.loc[previous_date, "precipitation"] - daily_data.loc[previous_date, "ETR"]) < 2/3 * daily_data.loc[previous_date, "RDU"] else 0
+            daily_data.loc[index, "eau_utile"] = calculate_eau_utile_value(daily_data.loc[previous_date, "eau_utile"], daily_data.loc[previous_date, "precipitation"], daily_data.loc[previous_date, "irrigation"], daily_data.loc[previous_date, "ETR"], daily_data.loc[previous_date, "capacité au champs"], daily_data.loc[previous_date, "RDU"])
+
+            daily_data.loc[previous_date, "irrigation_pv"] = 2/3 * daily_data.loc[previous_date, "RDU"] if (daily_data.loc[previous_date, "eau_utile_pv"] + daily_data.loc[previous_date, "precipitation"] - daily_data.loc[previous_date, "ETR_PV"]) < 2/3 * daily_data.loc[previous_date, "RDU"] else 0
+            daily_data.loc[index, "eau_utile_pv"] = calculate_eau_utile_value(daily_data.loc[previous_date, "eau_utile_pv"], daily_data.loc[previous_date, "precipitation"], daily_data.loc[previous_date, "irrigation_pv"], daily_data.loc[previous_date, "ETR_PV"], daily_data.loc[previous_date, "capacité au champs"], daily_data.loc[previous_date, "RDU"])
+    daily_data.loc[configuration.end_date, "irrigation"] = 2/3 * daily_data.loc[configuration.end_date, "RDU"] if (daily_data.loc[configuration.end_date, "eau_utile"] + daily_data.loc[configuration.end_date, "precipitation"] - daily_data.loc[configuration.end_date, "ETR"]) < 2/3 * daily_data.loc[configuration.end_date, "RDU"] else 0       
+    daily_data.loc[configuration.end_date, "irrigation_pv"] = 2/3 * daily_data.loc[configuration.end_date, "RDU"] if (daily_data.loc[configuration.end_date, "eau_utile_pv"] + daily_data.loc[configuration.end_date, "precipitation"] - daily_data.loc[configuration.end_date, "ETR_PV"]) < 2/3 * daily_data.loc[configuration.end_date, "RDU"] else 0
+
+
 
     result = daily_data
-    result_json = result.to_json(orient="records")  # You can use a different orientation if you want
+    result_json = result.to_json(orient="records")
     return Response(response=result_json, status=200, mimetype="application/json")
 
 if __name__ == "__main__":
