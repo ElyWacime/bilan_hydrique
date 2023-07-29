@@ -1,0 +1,149 @@
+
+<!-- Include the Chart.js library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Input fields for your API -->
+<form id="apiForm">
+  <label for="Texture_du_sol">Texture_du_sol:</label><br>
+  <input type="text" id="Texture_du_sol" name="Texture_du_sol"><br>
+  
+  <label for="Densité_apparente_des_motes_Bool">Densité_apparente_des_motes_Bool:</label>
+  <input id="Densité_apparente_des_motes_Bool" type="checkbox" name="Densité_apparente_des_motes_Bool">
+  
+  <label for="Densité_apparente_des_motes">Densité_apparente_des_motes:</label>
+  <input id="Densité_apparente_des_motes" type="number" step="0.01" name="Densité_apparente_des_motes">
+  
+  <label for="Densité_apparente_du_sol">Densité_apparente_du_sol:</label>
+  <input id="Densité_apparente_du_sol" type="text" name="Densité_apparente_du_sol">
+  
+  <label for="Profondeur_des_racines">Profondeur_des_racines:</label>
+  <input id="Profondeur_des_racines" type="text" name="Profondeur_des_racines">
+  
+  <label for="Pierrosité">Pierrosité:</label>
+  <input id="Pierrosité" type="text" name="Pierrosité">
+  
+  <label for="Latitude">Latitude:</label>
+  <input id="Latitude" type="text" name="Latitude">
+  
+  <label for="Longitude">Longitude:</label>
+  <input id="Longitude" type="text" name="Longitude">
+  
+  <label for="Hauteur_de_linstallation">Hauteur_de_linstallation:</label>
+  <input id="Hauteur_de_linstallation" type="text" name="Hauteur_de_linstallation">
+  
+  <label for="Taux_de_couverture">Taux_de_couverture:</label>
+  <input id="Taux_de_couverture" type="text" name="Taux_de_couverture">
+  
+  <label for="Plant_name">Plant_name:</label>
+  <input id="Plant_name" type="text" name="Plant_name">
+  
+  <label for="start_date">start_date:</label>
+  <input id="start_date" type="text" name="start_date">
+  
+  <label for="end_date">end_date:</label>
+  <input id="end_date" type="text" name="end_date">
+  
+  <label for="plantation_a_fleuraison_start">plantation_a_fleuraison_start:</label>
+  <input id="plantation_a_fleuraison_start" type="text" name="plantation_a_fleuraison_start">
+  
+  <label for="plantation_a_fleuraison_end">plantation_a_fleuraison_end:</label>
+  <input id="plantation_a_fleuraison_end" type="text" name="plantation_a_fleuraison_end">
+
+  <label for="fleuraison_a_mi_recolte_start">fleuraison_a_mi_recolte_start:</label>
+  <input id="fleuraison_a_mi_recolte_start" type="text" name="fleuraison_a_mi_recolte_start">
+
+  <label for="fleuraison_a_mi_recolte_end">fleuraison_a_mi_recolte_end:</label>
+  <input id="fleuraison_a_mi_recolte_end" type="text" name="fleuraison_a_mi_recolte_end"> 
+  
+  <label for="mi_recolte_fin_recolte_start">mi_recolte_fin_recolte_start:</label>
+  <input id="mi_recolte_fin_recolte_start" type="text" name="mi_recolte_fin_recolte_start">
+  
+  <label for="mi_recolte_fin_recolte_end">mi_recolte_fin_recolte_end:</label>
+  <input id="mi_recolte_fin_recolte_end" type="text" name="mi_recolte_fin_recolte_end">
+  
+  <input type="submit" value="Submit">
+</form>
+
+<!-- Canvas for your chart -->
+<canvas id="myChart"></canvas>
+
+<!-- JavaScript for form submission and chart generation -->
+<script>
+document.getElementById('apiForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const configuration_data = {
+        "Texture_du_sol": document.getElementById('Texture_du_sol').value,
+        "Densité_apparente_des_motes_Bool": document.getElementById('Densité_apparente_des_motes_Bool').checked,
+        "Densité_apparente_des_motes": parseFloat(document.getElementById('Densité_apparente_des_motes').value),
+        "Densité_apparente_du_sol": parseFloat(document.getElementById('Densité_apparente_du_sol').value),
+        "Profondeur_des_racines": parseFloat(document.getElementById('Profondeur_des_racines').value),
+        "Pierrosité": parseFloat(document.getElementById('Pierrosité').value),
+        "Latitude": parseFloat(document.getElementById('Latitude').value),
+        "Longitude": parseFloat(document.getElementById('Longitude').value),
+        "Hauteur_de_linstallation": parseFloat(document.getElementById('Hauteur_de_linstallation').value),
+        "Plant_name": document.getElementById('Plant_name').value,
+        "start_date": document.getElementById('start_date').value,
+        "end_date": document.getElementById('end_date').value,
+        "plantation_a_fleuraison": [document.getElementById('plantation_a_fleuraison_start').value, document.getElementById('plantation_a_fleuraison_end').value],
+        "fleuraison_a_mi_recolte": [document.getElementById('fleuraison_a_mi_recolte_start').value, document.getElementById('fleuraison_a_mi_recolte_end').value],
+        "mi_recolte_fin_recolte": [document.getElementById('mi_recolte_fin_recolte_start').value, document.getElementById('mi_recolte_fin_recolte_end').value],
+        
+    };
+
+    fetch('http://82.165.34.79/bilan_hydrique', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(configuration_data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        createChart(data);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+});
+
+function createChart(data) {
+    const ctx = document.getElementById('myChart').getContext('2d');
+
+    const dates = Object.keys(data);
+    const temperatures = dates.map(date => data[date].temperature_2m);
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: dates,
+            datasets: [{
+                label: 'Temperature (2m)',
+                data: temperatures,
+                fill: false,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'Date'
+                    }
+                },
+                y: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'Temperature (2m)'
+                    }
+                }
+            }
+        }
+    });
+}
+</script>

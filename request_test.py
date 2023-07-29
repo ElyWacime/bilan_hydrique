@@ -2,24 +2,22 @@ import requests
 import json
 
 configuration_data = {
-    "Texture_du_sol": "sample_value",
-    "Densité_apparente_des_motes": 1.0,
-    "Densité_apparente_du_sol": 1.0,
-    "Profondeur_des_racines": 1.0,
-    "Pierrosité": 1.0,
+    "Texture_du_sol": "Limon sableux",
+    "Densité_apparente_des_motes_Bool": True,
+    "Densité_apparente_des_motes": 1.68,
+    "Densité_apparente_du_sol": 1.68,
+    "Profondeur_des_racines": 50,
+    "Pierrosité": 6.3,
     "Latitude": 60.456,
     "Longitude": 40.012,
-    "Hauteur_de_linstallation": 1.0,
-    "Taux_de_couverture": 1.0,
-    "Plant_name": "Pomme de terre",
-    "start_date": "2023-01-01",
-    "end_date": "2023-01-31",
-    "Plante_a_50_de_levée": ["2023-01-05", "2023-01-10"],
-    "de_50_de_levée_a_50_recouvrement": ["2023-01-11", "2023-01-15"],
-    "de_50_recouvrement_a_recouvrement_total": ["2023-01-16", "2023-01-20"],
-    "recvroument_total_plus_30_jours": ["2023-01-21", "2023-01-25"],
-    "recvroument_total_plus_30_jours_a_debut_saison": ["2023-01-26", "2023-01-27"],
-    "debut_saison_a_maturite": ["2023-01-28", "2023-01-31"]
+    "Hauteur_de_linstallation": 2,
+    "Taux_de_couverture": 25,
+    "Plant_name": "Courgette",
+    "start_date": "2015-05-20",
+    "end_date": "2015-08-23",
+    "plantation_a_fleuraison": ("2015-05-20", "2015-06-20"),
+    "fleuraison_a_mi_recolte": ("2015-06-20", "2015-08-10"),
+    "mi_recolte_fin_recolte": ("2015-08-10", "2015-08-23")
 }
 
 api_endpoint = 'http://82.165.34.79/bilan_hydrique'
