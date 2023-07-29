@@ -1,6 +1,9 @@
 <!-- Include the Chart.js library -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+<!-- Map display -->
+<div id="map" style="height: 400px; width: 100%;"></div>
+
 <!-- Input fields for your API -->
 <form id="apiForm">
     <label for="Texture_du_sol">Texture_du_sol:</label><br>
@@ -146,4 +149,35 @@
             }
         });
     }
+    var map;
+    var marker;
+
+    function initMap() {
+        var initialLocation = { lat: -25.363, lng: 131.044 }; // Can be anywhere
+
+        map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 4,
+            center: initialLocation
+        });
+
+        marker = new google.maps.Marker({
+            position: initialLocation,
+            map: map,
+            draggable: true
+        });
+
+        google.maps.event.addListener(marker, 'dragend', function (evt) {
+            document.getElementById('Latitude').value = evt.latLng.lat().toFixed(3);
+            document.getElementById('Longitude').value = evt.latLng.lng().toFixed(3);
+        });
+
+        google.maps.event.addListener(map, 'click', function (evt) {
+            marker.setPosition(evt.latLng);
+            document.getElementById('Latitude').value = evt.latLng.lat().toFixed(3);
+            document.getElementById('Longitude').value = evt.latLng.lng().toFixed(3);
+        });
+    }
+</script>
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap">
 </script>
