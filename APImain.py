@@ -66,9 +66,9 @@ class Configuration(BaseModel):
     @validator('Densité_apparente_des_motes', 'Densité_apparente_du_sol', always=True)
     def check_motes_and_sol(cls, v, values, field):
         if 'Densité_apparente_des_motes_Bool' in values and values['Densité_apparente_des_motes_Bool'] is True:
-            if v is None:
+            if 'Densité_apparente_des_motes' not in values or 'Densité_apparente_du_sol' not in values or values['Densité_apparente_des_motes'] is None or values['Densité_apparente_du_sol'] is None:
                 raise ValueError(
-                    f'{field.alias} must be provided when Densité_apparente_des_motes_Bool is True')
+                    f'Both {field.alias} and the other field must be provided when Densité_apparente_des_motes_Bool is True')
         return v
 
 
@@ -258,7 +258,7 @@ def bilan_hydrique():
     daily_data['ETR_PV'] = daily_data['ETP_PV'] * daily_data['KC']
 
     # calcul Réserve Utile Maximum
-    if configuration.Densité_apparente_des_motes_Bool:
+    if configuration.Densité_apparente_des_motes_Bool == True:
         for keys in teneurSol[configuration.Texture_du_sol]:
             if keys[0] <= configuration.Densité_apparente_des_motes <= keys[1]:
                 absolute_values = []
@@ -342,7 +342,9 @@ def bilan_hydrique():
         daily_data.loc[configuration.end_date, "eau_utile_pv"] + daily_data.loc[configuration.end_date, "precipitation"] - daily_data.loc[configuration.end_date, "ETR_PV"]) < 2/3 * daily_data.loc[configuration.end_date, "RDU"] else 0
 
     result = daily_data
-    result_json = result.to_json(orient="records")
+    result.index = result.index.strftime('%Y-%m-%d')
+    result_json = result.to_json(orient="index")
+
     return Response(response=result_json, status=200, mimetype="application/json")
 
 

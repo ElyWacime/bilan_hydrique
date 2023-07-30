@@ -5,7 +5,7 @@ configuration_data = {
     "Texture_du_sol": "Limon sableux",
     "Densité_apparente_des_motes_Bool": True,
     "Densité_apparente_des_motes": 1.68,
-    "Densité_apparente_du_sol": 1.68,
+
     "Profondeur_des_racines": 50,
     "Pierrosité": 6.3,
     "Latitude": 60.456,
@@ -27,7 +27,7 @@ response = requests.post(api_endpoint, json=configuration_data)
 if response.status_code == 200:
 
     result = response.json()
-    print(result)  
+    print(result)
 else:
     print("Error occurred. Status code:", response.status_code)
-    print(response.text) 
+    print(response.text)
