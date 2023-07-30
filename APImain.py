@@ -258,7 +258,7 @@ def bilan_hydrique():
     daily_data['ETR_PV'] = daily_data['ETP_PV'] * daily_data['KC']
 
     # calcul Réserve Utile Maximum
-    if configuration.Densité_apparente_des_motes_Bool == True:
+    if configuration.Densité_apparente_des_motes != None and configuration.Densité_apparente_du_sol != None:
         for keys in teneurSol[configuration.Texture_du_sol]:
             if keys[0] <= configuration.Densité_apparente_des_motes <= keys[1]:
                 absolute_values = []
