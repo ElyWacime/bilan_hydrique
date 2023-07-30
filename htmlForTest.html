@@ -110,21 +110,78 @@
             });
     });
 
+    let myChart;
+
     function createChart(data) {
         const ctx = document.getElementById('myChart').getContext('2d');
 
-        const dates = Object.keys(data);
-        const temperatures = dates.map(date => data[date].temperature_2m);
+        // If myChart is not undefined (i.e., if a chart has already been created)
+        // then destroy the old chart before creating a new one.
+        if (myChart) {
+            myChart.destroy();
+        }
 
-        new Chart(ctx, {
+        const dates = Object.keys(data);
+        const eau_utile_prog = dates.map(date => data[date].eau_utile);
+        const RDU_prog = dates.map(date => data[date].RDU);
+        const eau_utile_pv_prog = dates.map(date => data[date].eau_utile_pv);
+        const ETR_prog = dates.map(date => data[date].ETR);
+        const ETR_pv_prog = dates.map(date => data[date].ETR_PV);
+        const ETP_prog = dates.map(date => data[date].ETP);
+        const ETP_PV_prog = dates.map(date => data[date].ETP_PV);
+
+
+        myChart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: dates,
                 datasets: [{
-                    label: 'Temperature (2m)',
-                    data: temperatures,
+                    label: 'eau Utile',
+                    data: eau_utile_prog,
                     fill: false,
                     borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                },
+                {
+                    label: 'RDU',
+                    data: RDU_prog,
+                    fill: false,
+                    borderColor: 'rgb(255, 99, 132)',
+                    tension: 0.1
+                },
+                {
+                    label: 'eau utile pv',
+                    data: eau_utile_pv_prog,
+                    fill: false,
+                    borderColor: 'rgb(110, 70, 110)',
+                    tension: 0.1
+                },
+                {
+                    label: 'ETR',
+                    data: ETR_prog,
+                    fill: false,
+                    borderColor: 'rgb(20, 50, 80)',
+                    tension: 0.1
+                },
+                {
+                    label: 'ETR_PV',
+                    data: ETR_pv_prog,
+                    fill: false,
+                    borderColor: 'rgb(137, 66, 66)',
+                    tension: 0.1
+                },
+                {
+                    label: 'ETP',
+                    data: ETP_prog,
+                    fill: false,
+                    borderColor: 'rgd(11, 99, 102)',
+                    tension: 0.1
+                },
+                {
+                    label: 'ETP_PV',
+                    data: ETP_PV_prog,
+                    fill: false,
+                    borderColor: 'rgd(205, 56, 165)',
                     tension: 0.1
                 }]
             },
@@ -142,13 +199,14 @@
                         display: true,
                         title: {
                             display: true,
-                            text: 'Temperature (2m)'
+                            text: 'eau utile / eau utile pv / RDU'
                         }
                     }
                 }
             }
         });
     }
+
     var map;
     var marker;
 
