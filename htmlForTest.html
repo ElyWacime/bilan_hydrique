@@ -69,7 +69,16 @@
 <form id="apiForm">
     <div class="input-row">
         <label for="Texture_du_sol">Texture_du_sol:</label><br>
-        <input type="text" id="Texture_du_sol" name="Texture_du_sol"><br>
+        <select id="Texture_du_sol" name="Texture_du_sol" onchange="toggleFields(this.value)">
+            <option value="Argile lourde">Argile lourde</option>
+            <option value="Argile">Argile</option>
+            <option value="Argile sableuse">Argile sableuse</option>
+            <option value="Limon">Limon</option>
+            <option value="Limon sableux">Limon sableux</option>
+            <option value="Limon trés sableux">Limon trés sableux</option>
+            <option value="Sable argilo-limoneux">Sable argilo-limoneux</option>
+            <option value="Sable">Sable</option>
+        </select><br>
 
         <label for="Densité_apparente_des_motes_Bool">Densité_apparente_des_motes_Bool:</label>
         <select id="Densité_apparente_des_motes_Bool" name="Densité_apparente_des_motes_Bool" onchange="toggleFields(this.value)">
@@ -102,13 +111,20 @@
         <input id="Taux_de_couverture" type="text" name="Taux_de_couverture">
 
         <label for="Plant_name">Plant_name:</label>
-        <input id="Plant_name" type="text" name="Plant_name">
+        <select id="Plant_name" name="Plant_name" onchange="toggleFields(this.value)">
+            <option value="Courgette">Courgette</option>
+            <option value="Poireau">Poireau</option>
+            <option value="Carotte">Carotte</option>
+            <option value="Pomme de terre">Pomme de terre</option>
+        </select>
 
         <label for="start_date">start_date:</label>
         <input id="start_date" type="text" name="start_date">
 
         <label for="end_date">end_date:</label>
         <input id="end_date" type="text" name="end_date">
+
+
 
         <label for="plantation_a_fleuraison_start">plantation_a_fleuraison_start:</label>
         <input id="plantation_a_fleuraison_start" type="text" name="plantation_a_fleuraison_start">
@@ -128,6 +144,28 @@
         <label for="mi_recolte_fin_recolte_end">mi_recolte_fin_recolte_end:</label>
         <input id="mi_recolte_fin_recolte_end" type="text" name="mi_recolte_fin_recolte_end">
 
+
+        
+
+
+        <label for="de_0_a_6_semaine_apres_semis_start">de_0_a_6_semaine_apres_semis_start:</label>
+        <input id="de_0_a_6_semaine_apres_semis_start" type="text" name="de_0_a_6_semaine_apres_semis_start">
+
+        <label for="de_0_a_6_semaine_apres_semis_end">de_0_a_6_semaine_apres_semis_end:</label>
+        <input id="de_0_a_6_semaine_apres_semis_end" type="text" name="de_0_a_6_semaine_apres_semis_end">
+
+        <label for="de_6_semaine_au_stade_start">de_6_semaine_au_stade_start:</label>
+        <input id="de_6_semaine_au_stade_start" type="text" name="de_6_semaine_au_stade_start">
+
+        <label for="de_6_semaine_au_stade_end">de_6_semaine_au_stade_end:</label>
+        <input id="de_6_semaine_au_stade_end" type="text" name="de_6_semaine_au_stade_end">
+
+        <label for="du_stade_a_recolte_start">du_stade_a_recolte_start:</label>
+        <input id="du_stade_a_recolte_start" type="text" name="du_stade_a_recolte_start">
+
+        <label for="du_stade_a_recolte_end">du_stade_a_recolte_end:</label>
+        <input id="du_stade_a_recolte_end" type="text" name="du_stade_a_recolte_end">
+
         <input type="submit" value="Submit">
     </div>
 </form>
@@ -138,6 +176,15 @@
 
     document.addEventListener("DOMContentLoaded", function() {
         toggleFields(document.getElementById('Densité_apparente_des_motes_Bool').value);
+        carotteFields(document.getElementById('Plant_name').value);
+
+        document.getElementById('Densité_apparente_des_motes_Bool').addEventListener('change', function() {
+        toggleFields(this.value);
+        });
+
+        document.getElementById('Plant_name').addEventListener('change', function() {
+            carotteFields(this.value);
+        });
     });
 
     function toggleFields(value) {
@@ -145,6 +192,7 @@
         const densiteSolField = document.getElementById('Densité_apparente_du_sol');
         const densiteMotesLabel = document.querySelector('label[for="Densité_apparente_des_motes"]');
         const densiteSolLabel = document.querySelector('label[for="Densité_apparente_du_sol"]');
+
         if (value === "oui") {
             densiteMotesField.style.display = 'block';
             densiteSolField.style.display = 'block';
@@ -155,6 +203,57 @@
             densiteSolField.style.display = 'none';
             densiteMotesLabel.style.display = 'none';
             densiteSolLabel.style.display = 'none';
+        }
+
+    }
+
+    function carotteFields(value) {
+        
+        const de_0_a_6_semaine_apres_semis_start_label = document.querySelector('label[for="de_0_a_6_semaine_apres_semis_start"]');
+        const de_0_a_6_semaine_apres_semis_start_input = document.getElementById("de_0_a_6_semaine_apres_semis_start");
+        const de_0_a_6_semaine_apres_semis_end_label = document.querySelector('label[for="de_0_a_6_semaine_apres_semis_end"]');
+        const de_0_a_6_semaine_apres_semis_end_input = document.getElementById("de_0_a_6_semaine_apres_semis_end");
+        
+        const de_6_semaine_au_stade_start_label = document.querySelector('label[for="de_6_semaine_au_stade_start"]');
+        const de_6_semaine_au_stade_start_input = document.getElementById("de_6_semaine_au_stade_start");
+        const de_6_semaine_au_stade_end_label = document.querySelector('label[for="de_6_semaine_au_stade_end"]');
+        const de_6_semaine_au_stade_end_input = document.getElementById("de_6_semaine_au_stade_end");
+
+        const du_stade_a_recolte_start_label = document.querySelector('label[for="du_stade_a_recolte_start"]');
+        const du_stade_a_recolte_start_input = document.getElementById("du_stade_a_recolte_start");
+        const du_stade_a_recolte_end_label = document.querySelector('label[for="du_stade_a_recolte_end"]');
+        const du_stade_a_recolte_end_input = document.getElementById("du_stade_a_recolte_end");
+
+        if (value === "Carotte") {
+            de_0_a_6_semaine_apres_semis_start_input.style.display = 'block';
+            de_0_a_6_semaine_apres_semis_start_label.style.display = 'block';
+            de_0_a_6_semaine_apres_semis_end_input.style.display = 'block';
+            de_0_a_6_semaine_apres_semis_end_label.style.display = 'block';
+            
+            de_6_semaine_au_stade_end_input.style.display = 'block';
+            de_6_semaine_au_stade_end_label.style.display = 'block';
+            de_6_semaine_au_stade_start_input.style.display = 'block';
+            de_6_semaine_au_stade_start_label.style.display = 'block';
+
+            du_stade_a_recolte_end_input.style.display = 'block';
+            du_stade_a_recolte_end_label.style.display = 'block';
+            du_stade_a_recolte_start_input.style.display = 'block';
+            du_stade_a_recolte_start_label.style.display = 'block';
+        } else {
+            de_0_a_6_semaine_apres_semis_start_input.style.display = 'none';
+            de_0_a_6_semaine_apres_semis_start_label.style.display = 'none';
+            de_0_a_6_semaine_apres_semis_end_input.style.display = 'none';
+            de_0_a_6_semaine_apres_semis_end_label.style.display = 'none';
+            
+            de_6_semaine_au_stade_end_input.style.display = 'none';
+            de_6_semaine_au_stade_end_label.style.display = 'none';
+            de_6_semaine_au_stade_start_input.style.display = 'none';
+            de_6_semaine_au_stade_start_label.style.display = 'none';
+
+            du_stade_a_recolte_end_input.style.display = 'none';
+            du_stade_a_recolte_end_label.style.display = 'none';
+            du_stade_a_recolte_start_input.style.display = 'none';
+            du_stade_a_recolte_start_label.style.display = 'none';
         }
     }
 
