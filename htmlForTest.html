@@ -1,82 +1,166 @@
-<!-- Include the Chart.js library -->
+<style>
+    .input-row {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+    }
+    
+    form {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    
+    label {
+        display: block;
+        margin-top: 20px;
+        color: #333;
+        font-weight: bold;
+        font-family: Montserrat;
+        font-size: 18px;
+    }
+    
+    input[type="text"], select {
+        width: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        width: 100px;
+        height: 30px;
+    }
+    
+    input[type="submit"] {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        margin-top: 20px;
+        background-color: #4d78fb;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+    
+    input[type="submit"]:hover {
+        background-color: #02008c;
+    }
+</style>
+    
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <!-- Map display -->
 <div id="map" style="height: 400px; width: 100%;"></div>
 
-<!-- Input fields for your API -->
+<!-- Input fields for API -->
 <form id="apiForm">
-    <label for="Texture_du_sol">Texture_du_sol:</label><br>
-    <input type="text" id="Texture_du_sol" name="Texture_du_sol"><br>
+    <div class="input-row">
+        <label for="Texture_du_sol">Texture_du_sol:</label><br>
+        <input type="text" id="Texture_du_sol" name="Texture_du_sol"><br>
 
-    <label for="Densité_apparente_des_motes_Bool">Densité_apparente_des_motes_Bool:</label>
-    <input id="Densité_apparente_des_motes_Bool" type="checkbox" name="Densité_apparente_des_motes_Bool">
+        <label for="Densité_apparente_des_motes_Bool">Densité_apparente_des_motes_Bool:</label>
+        <select id="Densité_apparente_des_motes_Bool" name="Densité_apparente_des_motes_Bool" onchange="toggleFields(this.value)">
+            <option value="non">Non</option>
+            <option value="oui">Oui</option>
+        </select>    
 
-    <label for="Densité_apparente_des_motes">Densité_apparente_des_motes:</label>
-    <input id="Densité_apparente_des_motes" type="text" step="0.01" name="Densité_apparente_des_motes">
+        <label for="Densité_apparente_des_motes">Densité_apparente_des_motes:</label>
+        <input id="Densité_apparente_des_motes" type="text" step="0.01" name="Densité_apparente_des_motes">
 
-    <label for="Densité_apparente_du_sol">Densité_apparente_du_sol:</label>
-    <input id="Densité_apparente_du_sol" type="text" name="Densité_apparente_du_sol">
+        <label for="Densité_apparente_du_sol">Densité_apparente_du_sol:</label>
+        <input id="Densité_apparente_du_sol" type="text" name="Densité_apparente_du_sol">
 
-    <label for="Profondeur_des_racines">Profondeur_des_racines:</label>
-    <input id="Profondeur_des_racines" type="text" name="Profondeur_des_racines">
+        <label for="Profondeur_des_racines">Profondeur_des_racines:</label>
+        <input id="Profondeur_des_racines" type="text" name="Profondeur_des_racines">
 
-    <label for="Pierrosité">Pierrosité:</label>
-    <input id="Pierrosité" type="text" name="Pierrosité">
+        <label for="Pierrosité">Pierrosité:</label>
+        <input id="Pierrosité" type="text" name="Pierrosité">
 
-    <label for="Latitude">Latitude:</label>
-    <input id="Latitude" type="text" name="Latitude">
+        <label for="Latitude">Latitude:</label>
+        <input id="Latitude" type="text" name="Latitude">
 
-    <label for="Longitude">Longitude:</label>
-    <input id="Longitude" type="text" name="Longitude">
+        <label for="Longitude">Longitude:</label>
+        <input id="Longitude" type="text" name="Longitude">
 
-    <label for="Hauteur_de_linstallation">Hauteur_de_linstallation:</label>
-    <input id="Hauteur_de_linstallation" type="text" name="Hauteur_de_linstallation">
+        <label for="Hauteur_de_linstallation">Hauteur_de_linstallation:</label>
+        <input id="Hauteur_de_linstallation" type="text" name="Hauteur_de_linstallation">
 
-    <label for="Taux_de_couverture">Taux_de_couverture:</label>
-    <input id="Taux_de_couverture" type="text" name="Taux_de_couverture">
+        <label for="Taux_de_couverture">Taux_de_couverture:</label>
+        <input id="Taux_de_couverture" type="text" name="Taux_de_couverture">
 
-    <label for="Plant_name">Plant_name:</label>
-    <input id="Plant_name" type="text" name="Plant_name">
+        <label for="Plant_name">Plant_name:</label>
+        <input id="Plant_name" type="text" name="Plant_name">
 
-    <label for="start_date">start_date:</label>
-    <input id="start_date" type="text" name="start_date">
+        <label for="start_date">start_date:</label>
+        <input id="start_date" type="text" name="start_date">
 
-    <label for="end_date">end_date:</label>
-    <input id="end_date" type="text" name="end_date">
+        <label for="end_date">end_date:</label>
+        <input id="end_date" type="text" name="end_date">
 
-    <label for="plantation_a_fleuraison_start">plantation_a_fleuraison_start:</label>
-    <input id="plantation_a_fleuraison_start" type="text" name="plantation_a_fleuraison_start">
+        <label for="plantation_a_fleuraison_start">plantation_a_fleuraison_start:</label>
+        <input id="plantation_a_fleuraison_start" type="text" name="plantation_a_fleuraison_start">
 
-    <label for="plantation_a_fleuraison_end">plantation_a_fleuraison_end:</label>
-    <input id="plantation_a_fleuraison_end" type="text" name="plantation_a_fleuraison_end">
+        <label for="plantation_a_fleuraison_end">plantation_a_fleuraison_end:</label>
+        <input id="plantation_a_fleuraison_end" type="text" name="plantation_a_fleuraison_end">
 
-    <label for="fleuraison_a_mi_recolte_start">fleuraison_a_mi_recolte_start:</label>
-    <input id="fleuraison_a_mi_recolte_start" type="text" name="fleuraison_a_mi_recolte_start">
+        <label for="fleuraison_a_mi_recolte_start">fleuraison_a_mi_recolte_start:</label>
+        <input id="fleuraison_a_mi_recolte_start" type="text" name="fleuraison_a_mi_recolte_start">
 
-    <label for="fleuraison_a_mi_recolte_end">fleuraison_a_mi_recolte_end:</label>
-    <input id="fleuraison_a_mi_recolte_end" type="text" name="fleuraison_a_mi_recolte_end">
+        <label for="fleuraison_a_mi_recolte_end">fleuraison_a_mi_recolte_end:</label>
+        <input id="fleuraison_a_mi_recolte_end" type="text" name="fleuraison_a_mi_recolte_end">
 
-    <label for="mi_recolte_fin_recolte_start">mi_recolte_fin_recolte_start:</label>
-    <input id="mi_recolte_fin_recolte_start" type="text" name="mi_recolte_fin_recolte_start">
+        <label for="mi_recolte_fin_recolte_start">mi_recolte_fin_recolte_start:</label>
+        <input id="mi_recolte_fin_recolte_start" type="text" name="mi_recolte_fin_recolte_start">
 
-    <label for="mi_recolte_fin_recolte_end">mi_recolte_fin_recolte_end:</label>
-    <input id="mi_recolte_fin_recolte_end" type="text" name="mi_recolte_fin_recolte_end">
+        <label for="mi_recolte_fin_recolte_end">mi_recolte_fin_recolte_end:</label>
+        <input id="mi_recolte_fin_recolte_end" type="text" name="mi_recolte_fin_recolte_end">
 
-    <input type="submit" value="Submit">
+        <input type="submit" value="Submit">
+    </div>
 </form>
 
-<!-- Canvas for your chart -->
 <canvas id="myChart"></canvas>
 
-<!-- JavaScript for form submission and chart generation -->
 <script>
+
+    document.addEventListener("DOMContentLoaded", function() {
+        toggleFields(document.getElementById('Densité_apparente_des_motes_Bool').value);
+    });
+
+    function toggleFields(value) {
+        const densiteMotesField = document.getElementById('Densité_apparente_des_motes');
+        const densiteSolField = document.getElementById('Densité_apparente_du_sol');
+        const densiteMotesLabel = document.querySelector('label[for="Densité_apparente_des_motes"]');
+        const densiteSolLabel = document.querySelector('label[for="Densité_apparente_du_sol"]');
+        if (value === "oui") {
+            densiteMotesField.style.display = 'block';
+            densiteSolField.style.display = 'block';
+            densiteMotesLabel.style.display = 'block';
+            densiteSolLabel.style.display = 'block';
+        } else {
+            densiteMotesField.style.display = 'none';
+            densiteSolField.style.display = 'none';
+            densiteMotesLabel.style.display = 'none';
+            densiteSolLabel.style.display = 'none';
+        }
+    }
+
+
     document.getElementById('apiForm').addEventListener('submit', function (e) {
         e.preventDefault();
 
+        const densiteApparenteDesMotesBoolValue = document.getElementById('Densité_apparente_des_motes_Bool').value;
+        const densiteApparenteDesMotesBool = densiteApparenteDesMotesBoolValue === 'oui';
+
         const configuration_data = {
             "Texture_du_sol": document.getElementById('Texture_du_sol').value,
-            "Densité_apparente_des_motes_Bool": document.getElementById('Densité_apparente_des_motes_Bool').checked,
+            "Densité_apparente_des_motes_Bool": densiteApparenteDesMotesBool,
             "Densité_apparente_des_motes": parseFloat(document.getElementById('Densité_apparente_des_motes').value),
             "Densité_apparente_du_sol": parseFloat(document.getElementById('Densité_apparente_du_sol').value),
             "Profondeur_des_racines": parseFloat(document.getElementById('Profondeur_des_racines').value),
@@ -91,7 +175,6 @@
             "plantation_a_fleuraison": [document.getElementById('plantation_a_fleuraison_start').value, document.getElementById('plantation_a_fleuraison_end').value],
             "fleuraison_a_mi_recolte": [document.getElementById('fleuraison_a_mi_recolte_start').value, document.getElementById('fleuraison_a_mi_recolte_end').value],
             "mi_recolte_fin_recolte": [document.getElementById('mi_recolte_fin_recolte_start').value, document.getElementById('mi_recolte_fin_recolte_end').value],
-
         };
 
         fetch('http://82.165.34.79/bilan_hydrique', {
@@ -115,8 +198,6 @@
     function createChart(data) {
         const ctx = document.getElementById('myChart').getContext('2d');
 
-        // If myChart is not undefined (i.e., if a chart has already been created)
-        // then destroy the old chart before creating a new one.
         if (myChart) {
             myChart.destroy();
         }
@@ -211,7 +292,7 @@
     var marker;
 
     function initMap() {
-        var initialLocation = { lat: -25.363, lng: 131.044 }; // Can be anywhere
+        var initialLocation = { lat: -25.363, lng: 131.044 };
 
         map = new google.maps.Map(document.getElementById('map'), {
             zoom: 4,
@@ -237,5 +318,5 @@
     }
 </script>
 
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap">
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=API_key&callback=initMap">
 </script>
