@@ -213,10 +213,9 @@
         const eau_utile_prog = dates.map(date => data[date].eau_utile);
         const RDU_prog = dates.map(date => data[date].RDU);
         const eau_utile_pv_prog = dates.map(date => data[date].eau_utile_pv);
-        const ETR_prog = dates.map(date => data[date].ETR);
-        const ETR_pv_prog = dates.map(date => data[date].ETR_PV);
-        const ETP_prog = dates.map(date => data[date].ETP);
-        const ETP_PV_prog = dates.map(date => data[date].ETP_PV);
+        const capacité_au_champs_prog = dates.map(date => data[date].capacité_au_champs);
+        const irrigation_prog = dates.map(date => data[date].irrigation)
+        const irrigation_pv_prog = dates.map(date => data[date].irrigation_pv)
 
 
         myChart = new Chart(ctx, {
@@ -245,31 +244,24 @@
                     tension: 0.1
                 },
                 {
-                    label: 'ETR',
-                    data: ETR_prog,
+                    label: 'capacité_au_champs',
+                    data: capacité_au_champs_prog,
                     fill: false,
-                    borderColor: 'rgb(20, 50, 80)',
+                    borderColor: 'rgb(10, 250, 80)',
                     tension: 0.1
                 },
                 {
-                    label: 'ETR_PV',
-                    data: ETR_pv_prog,
+                    label: 'irrigation',
+                    data: irrigation_prog,
                     fill: false,
                     borderColor: 'rgb(137, 66, 66)',
                     tension: 0.1
                 },
                 {
-                    label: 'ETP',
-                    data: ETP_prog,
+                    label: 'irrigation pv',
+                    data: irrigation_pv_prog,
                     fill: false,
                     borderColor: 'rgd(11, 99, 102)',
-                    tension: 0.1
-                },
-                {
-                    label: 'ETP_PV',
-                    data: ETP_PV_prog,
-                    fill: false,
-                    borderColor: 'rgd(205, 56, 165)',
                     tension: 0.1
                 }]
             },
