@@ -8,12 +8,12 @@
     body {
         font-family: Arial, sans-serif;
     }
-    
+
     form {
         max-width: 600px;
         margin: 0 auto;
     }
-    
+
     label {
         display: block;
         margin-top: 8px;
@@ -22,8 +22,9 @@
         font-family: Montserrat;
         font-size: 18px;
     }
-    
-    input[type="text"], select {
+
+    input[type="text"],
+    select {
         width: 100%;
         padding: 10px;
         box-sizing: border-box;
@@ -40,7 +41,7 @@
         margin: 0;
         line-height: 1.2;
     }
-    
+
     input[type="submit"] {
         display: block;
         width: 100%;
@@ -53,12 +54,12 @@
         cursor: pointer;
         font-size: 16px;
     }
-    
+
     input[type="submit"]:hover {
         background-color: #02008c;
     }
 </style>
-    
+
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -81,10 +82,11 @@
         </select><br>
 
         <label for="Densité_apparente_des_motes_Bool">Densité_apparente_des_motes_Bool:</label>
-        <select id="Densité_apparente_des_motes_Bool" name="Densité_apparente_des_motes_Bool" onchange="toggleFields(this.value)">
+        <select id="Densité_apparente_des_motes_Bool" name="Densité_apparente_des_motes_Bool"
+            onchange="toggleFields(this.value)">
             <option value="non">Non</option>
             <option value="oui">Oui</option>
-        </select>    
+        </select>
 
         <label for="Densité_apparente_des_motes">Densité_apparente_des_motes:</label>
         <input id="Densité_apparente_des_motes" type="text" step="0.01" name="Densité_apparente_des_motes">
@@ -119,52 +121,65 @@
         </select>
 
         <label for="start_date">start_date:</label>
-        <input id="start_date" type="text" name="start_date">
+        <input id="start_date" type="text" name="start_date" placeholder="AAAA-MM-JJ">
 
         <label for="end_date">end_date:</label>
-        <input id="end_date" type="text" name="end_date">
+        <input id="end_date" type="text" name="end_date" placeholder="AAAA-MM-JJ">
 
 
 
         <label for="plantation_a_fleuraison_start">plantation_a_fleuraison_start:</label>
-        <input id="plantation_a_fleuraison_start" type="text" name="plantation_a_fleuraison_start">
+        <input id="plantation_a_fleuraison_start" type="text" name="plantation_a_fleuraison_start"
+            placeholder="AAAA-MM-JJ">
 
         <label for="plantation_a_fleuraison_end">plantation_a_fleuraison_end:</label>
-        <input id="plantation_a_fleuraison_end" type="text" name="plantation_a_fleuraison_end">
+        <input id="plantation_a_fleuraison_end" type="text" name="plantation_a_fleuraison_end" placeholder="AAAA-MM-JJ">
 
         <label for="fleuraison_a_mi_recolte_start">fleuraison_a_mi_recolte_start:</label>
-        <input id="fleuraison_a_mi_recolte_start" type="text" name="fleuraison_a_mi_recolte_start">
+        <input id="fleuraison_a_mi_recolte_start" type="text" name="fleuraison_a_mi_recolte_start"
+            placeholder="AAAA-MM-JJ">
 
         <label for="fleuraison_a_mi_recolte_end">fleuraison_a_mi_recolte_end:</label>
-        <input id="fleuraison_a_mi_recolte_end" type="text" name="fleuraison_a_mi_recolte_end">
+        <input id="fleuraison_a_mi_recolte_end" type="text" name="fleuraison_a_mi_recolte_end" placeholder="AAAA-MM-JJ">
 
         <label for="mi_recolte_fin_recolte_start">mi_recolte_fin_recolte_start:</label>
-        <input id="mi_recolte_fin_recolte_start" type="text" name="mi_recolte_fin_recolte_start">
+        <input id="mi_recolte_fin_recolte_start" type="text" name="mi_recolte_fin_recolte_start"
+            placeholder="AAAA-MM-JJ">
 
         <label for="mi_recolte_fin_recolte_end">mi_recolte_fin_recolte_end:</label>
-        <input id="mi_recolte_fin_recolte_end" type="text" name="mi_recolte_fin_recolte_end">
+        <input id="mi_recolte_fin_recolte_end" type="text" name="mi_recolte_fin_recolte_end" placeholder="AAAA-MM-JJ">
 
 
-        
+
 
 
         <label for="de_0_a_6_semaine_apres_semis_start">de_0_a_6_semaine_apres_semis_start:</label>
-        <input id="de_0_a_6_semaine_apres_semis_start" type="text" name="de_0_a_6_semaine_apres_semis_start">
+        <input id="de_0_a_6_semaine_apres_semis_start" type="text" name="de_0_a_6_semaine_apres_semis_start"
+            placeholder="AAAA-MM-JJ">
 
         <label for="de_0_a_6_semaine_apres_semis_end">de_0_a_6_semaine_apres_semis_end:</label>
-        <input id="de_0_a_6_semaine_apres_semis_end" type="text" name="de_0_a_6_semaine_apres_semis_end">
+        <input id="de_0_a_6_semaine_apres_semis_end" type="text" name="de_0_a_6_semaine_apres_semis_end"
+            placeholder="AAAA-MM-JJ">
 
         <label for="de_6_semaine_au_stade_start">de_6_semaine_au_stade_start:</label>
-        <input id="de_6_semaine_au_stade_start" type="text" name="de_6_semaine_au_stade_start">
+        <input id="de_6_semaine_au_stade_start" type="text" name="de_6_semaine_au_stade_start" placeholder="AAAA-MM-JJ">
 
         <label for="de_6_semaine_au_stade_end">de_6_semaine_au_stade_end:</label>
-        <input id="de_6_semaine_au_stade_end" type="text" name="de_6_semaine_au_stade_end">
+        <input id="de_6_semaine_au_stade_end" type="text" name="de_6_semaine_au_stade_end" placeholder="AAAA-MM-JJ">
 
         <label for="du_stade_a_recolte_start">du_stade_a_recolte_start:</label>
-        <input id="du_stade_a_recolte_start" type="text" name="du_stade_a_recolte_start">
+        <input id="du_stade_a_recolte_start" type="text" name="du_stade_a_recolte_start" placeholder="AAAA-MM-JJ">
 
         <label for="du_stade_a_recolte_end">du_stade_a_recolte_end:</label>
-        <input id="du_stade_a_recolte_end" type="text" name="du_stade_a_recolte_end">
+        <input id="du_stade_a_recolte_end" type="text" name="du_stade_a_recolte_end" placeholder="AAAA-MM-JJ">
+
+
+
+        <label for="reprise_a_recolte_start">reprise_a_recolte_start:</label>
+        <input id="reprise_a_recolte_start" type="text" name="reprise_a_recolte_start" placeholder="AAAA-MM-JJ">
+
+        <label for="reprise_a_recolte_end">reprise_a_recolte_end:</label>
+        <input id="reprise_a_recolte_end" type="text" name="reprise_a_recolte_end" placeholder="AAAA-MM-JJ">
 
         <input type="submit" value="Submit">
     </div>
@@ -174,17 +189,22 @@
 
 <script>
 
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         toggleFields(document.getElementById('Densité_apparente_des_motes_Bool').value);
         carotteFields(document.getElementById('Plant_name').value);
+        courgetteFields(document.getElementById('Plant_name').value);
+        poireauxFields(document.getElementById('Plant_name').value);
 
-        document.getElementById('Densité_apparente_des_motes_Bool').addEventListener('change', function() {
-        toggleFields(this.value);
+        document.getElementById('Densité_apparente_des_motes_Bool').addEventListener('change', function () {
+            toggleFields(this.value);
         });
 
-        document.getElementById('Plant_name').addEventListener('change', function() {
+        document.getElementById('Plant_name').addEventListener('change', function () {
             carotteFields(this.value);
+            courgetteFields(this.value);
+            poireauxFields(this.value);
         });
+
     });
 
     function toggleFields(value) {
@@ -208,12 +228,12 @@
     }
 
     function carotteFields(value) {
-        
+
         const de_0_a_6_semaine_apres_semis_start_label = document.querySelector('label[for="de_0_a_6_semaine_apres_semis_start"]');
         const de_0_a_6_semaine_apres_semis_start_input = document.getElementById("de_0_a_6_semaine_apres_semis_start");
         const de_0_a_6_semaine_apres_semis_end_label = document.querySelector('label[for="de_0_a_6_semaine_apres_semis_end"]');
         const de_0_a_6_semaine_apres_semis_end_input = document.getElementById("de_0_a_6_semaine_apres_semis_end");
-        
+
         const de_6_semaine_au_stade_start_label = document.querySelector('label[for="de_6_semaine_au_stade_start"]');
         const de_6_semaine_au_stade_start_input = document.getElementById("de_6_semaine_au_stade_start");
         const de_6_semaine_au_stade_end_label = document.querySelector('label[for="de_6_semaine_au_stade_end"]');
@@ -229,7 +249,7 @@
             de_0_a_6_semaine_apres_semis_start_label.style.display = 'block';
             de_0_a_6_semaine_apres_semis_end_input.style.display = 'block';
             de_0_a_6_semaine_apres_semis_end_label.style.display = 'block';
-            
+
             de_6_semaine_au_stade_end_input.style.display = 'block';
             de_6_semaine_au_stade_end_label.style.display = 'block';
             de_6_semaine_au_stade_start_input.style.display = 'block';
@@ -244,7 +264,7 @@
             de_0_a_6_semaine_apres_semis_start_label.style.display = 'none';
             de_0_a_6_semaine_apres_semis_end_input.style.display = 'none';
             de_0_a_6_semaine_apres_semis_end_label.style.display = 'none';
-            
+
             de_6_semaine_au_stade_end_input.style.display = 'none';
             de_6_semaine_au_stade_end_label.style.display = 'none';
             de_6_semaine_au_stade_start_input.style.display = 'none';
@@ -254,6 +274,74 @@
             du_stade_a_recolte_end_label.style.display = 'none';
             du_stade_a_recolte_start_input.style.display = 'none';
             du_stade_a_recolte_start_label.style.display = 'none';
+        }
+    }
+
+    function courgetteFields(value) {
+        const plantation_a_fleuraison_start_label = document.querySelector('label[for="plantation_a_fleuraison_start"]');
+        const plantation_a_fleuraison_start_input = document.getElementById("plantation_a_fleuraison_start");
+        const plantation_a_fleuraison_end_label = document.querySelector('label[for="plantation_a_fleuraison_end"]');
+        const plantation_a_fleuraison_end_input = document.getElementById("plantation_a_fleuraison_end");
+
+        const fleuraison_a_mi_recolte_start_label = document.querySelector('label[for="fleuraison_a_mi_recolte_start"]');
+        const fleuraison_a_mi_recolte_start_input = document.getElementById("fleuraison_a_mi_recolte_start");
+        const fleuraison_a_mi_recolte_end_label = document.querySelector('label[for="fleuraison_a_mi_recolte_end"]');
+        const fleuraison_a_mi_recolte_end_input = document.getElementById("fleuraison_a_mi_recolte_end");
+
+        const mi_recolte_fin_recolte_start_label = document.querySelector('label[for="mi_recolte_fin_recolte_start"]');
+        const mi_recolte_fin_recolte_start_input = document.getElementById("mi_recolte_fin_recolte_start");
+        const mi_recolte_fin_recolte_end_label = document.querySelector('label[for="mi_recolte_fin_recolte_end"]');
+        const mi_recolte_fin_recolte_end_input = document.getElementById("mi_recolte_fin_recolte_end");
+
+        if (value === "Courgette") {
+            plantation_a_fleuraison_start_input.style.display = 'block';
+            plantation_a_fleuraison_start_label.style.display = 'block';
+            plantation_a_fleuraison_end_input.style.display = 'block';
+            plantation_a_fleuraison_end_label.style.display = 'block';
+
+            fleuraison_a_mi_recolte_end_input.style.display = 'block';
+            fleuraison_a_mi_recolte_end_label.style.display = 'block';
+            fleuraison_a_mi_recolte_start_input.style.display = 'block';
+            fleuraison_a_mi_recolte_start_label.style.display = 'block';
+
+            mi_recolte_fin_recolte_end_input.style.display = 'block';
+            mi_recolte_fin_recolte_end_label.style.display = 'block';
+            mi_recolte_fin_recolte_start_input.style.display = 'block';
+            mi_recolte_fin_recolte_start_label.style.display = 'block';
+        } else {
+            plantation_a_fleuraison_start_input.style.display = 'none';
+            plantation_a_fleuraison_start_label.style.display = 'none';
+            plantation_a_fleuraison_end_input.style.display = 'none';
+            plantation_a_fleuraison_end_label.style.display = 'none';
+
+            fleuraison_a_mi_recolte_end_input.style.display = 'none';
+            fleuraison_a_mi_recolte_end_label.style.display = 'none';
+            fleuraison_a_mi_recolte_start_input.style.display = 'none';
+            fleuraison_a_mi_recolte_start_label.style.display = 'none';
+
+            mi_recolte_fin_recolte_end_input.style.display = 'none';
+            mi_recolte_fin_recolte_end_label.style.display = 'none';
+            mi_recolte_fin_recolte_start_input.style.display = 'none';
+            mi_recolte_fin_recolte_start_label.style.display = 'none';
+        }
+    }
+
+    function poireauxFields(value) {
+        const reprise_a_recolte_start_label = document.querySelector('label[for="reprise_a_recolte_start"]');
+        const reprise_a_recolte_start_input = document.getElementById('reprise_a_recolte_start');
+        const reprise_a_recolte_end_label = document.querySelector('label[for="reprise_a_recolte_end"]');
+        const reprise_a_recolte_end_input = document.getElementById('reprise_a_recolte_end');
+
+        if (value === 'Poireau') {
+            reprise_a_recolte_start_label.style.display = 'block';
+            reprise_a_recolte_start_input.style.display = 'block';
+            reprise_a_recolte_end_label.style.display = 'block';
+            reprise_a_recolte_end_input.style.display = 'block';
+        } else {
+            reprise_a_recolte_start_label.style.display = 'none';
+            reprise_a_recolte_start_input.style.display = 'none';
+            reprise_a_recolte_end_label.style.display = 'none';
+            reprise_a_recolte_end_input.style.display = 'none';
         }
     }
 
@@ -292,12 +380,14 @@
         })
             .then(response => response.json())
             .then(data => {
+                console.log("Data sent to server: ", data);
                 createChart(data);
             })
             .catch((error) => {
                 console.error('Error:', error);
             });
     });
+
 
     let myChart;
 
