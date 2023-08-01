@@ -352,7 +352,7 @@
         const densiteApparenteDesMotesBoolValue = document.getElementById('Densité_apparente_des_motes_Bool').value;
         const densiteApparenteDesMotesBool = densiteApparenteDesMotesBoolValue === 'oui';
 
-        const configuration_data = {
+        let configuration_data = {
             "Texture_du_sol": document.getElementById('Texture_du_sol').value,
             "Densité_apparente_des_motes_Bool": densiteApparenteDesMotesBool,
             "Densité_apparente_des_motes": parseFloat(document.getElementById('Densité_apparente_des_motes').value),
@@ -366,10 +366,24 @@
             "Plant_name": document.getElementById('Plant_name').value,
             "start_date": document.getElementById('start_date').value,
             "end_date": document.getElementById('end_date').value,
-            "plantation_a_fleuraison": [document.getElementById('plantation_a_fleuraison_start').value, document.getElementById('plantation_a_fleuraison_end').value],
-            "fleuraison_a_mi_recolte": [document.getElementById('fleuraison_a_mi_recolte_start').value, document.getElementById('fleuraison_a_mi_recolte_end').value],
-            "mi_recolte_fin_recolte": [document.getElementById('mi_recolte_fin_recolte_start').value, document.getElementById('mi_recolte_fin_recolte_end').value],
         };
+
+        let plantName = document.getElementById('Plant_name').value;
+
+        if (plantName === 'Courgette') {
+            configuration_data["plantation_a_fleuraison"] = [document.getElementById('plantation_a_fleuraison_start').value, document.getElementById("plantation_a_fleuraison_end").value];
+            configuration_data["fleuraison_a_mi_recolte"] = [document.getElementById('fleuraison_a_mi_recolte_start').value, document.getElementById('fleuraison_a_mi_recolte_end').value];
+            configuration_data["mi_recolte_fin_recolte"] = [document.getElementById('mi_recolte_fin_recolte_start').value, document.getElementById('mi_recolte_fin_recolte_end').value];
+
+        } else if (plantName == "Carotte") {
+            configuration_data["de_0_a_6_semaine_apres_semis"] = [document.getElementById('de_0_a_6_semaine_apres_semis_start').value, document.getElementById('de_0_a_6_semaine_apres_semis_end').value];
+            configuration_data["de_6_semaine_au_stade"] = [document.getElementById('de_6_semaine_au_stade_start').value, document.getElementById('de_6_semaine_au_stade_end').value];
+            configuration_data["du_stade_a_recolte"] = [document.getElementById('du_stade_a_recolte_start').value, document.getElementById('du_stade_a_recolte_end').value];
+
+        } else if (plantName === 'Poireau') {
+            configuration_data["reprise_a_recolte"] = [document.getElementById('reprise_a_recolte_start').value, document.getElementById('reprise_a_recolte_end').value];
+
+        }
 
         fetch('http://82.165.34.79/bilan_hydrique', {
             method: 'POST',
