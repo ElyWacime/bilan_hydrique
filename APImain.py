@@ -75,8 +75,59 @@ class Configuration(BaseModel):
 @app.route('/bilan_hydrique', methods=['POST'])
 def bilan_hydrique():
 
+    if not request.is_json:
+        return jsonify({"error": "Request data is not JSON"}), 400
+
     configuration_data = request.get_json()
     configuration = Configuration(**configuration_data)
+
+    required_keys = ["Texture_du_sol", "Densité_apparente_des_motes_Bool", "Profondeur_des_racines",
+                     "Pierrosité", "Latitude", "Longitude", "Hauteur_de_linstallation", "Taux_de_couverture",
+                     "Plant_name", "start_date", "end_date"]
+
+    if not all(key in configuration_data for key in required_keys):
+        return jsonify({"Error": "Required data is missing"}), 400
+
+    if configuration.Plant_name == "Courgette":
+        required_dates = ["plantation_a_fleuraison",
+                          "fleuraison_a_mi_recolte", "mi_recolte_fin_recolte"]
+        for date in required_dates:
+            if date not in configuration_data:
+                return jsonify({"Error": "Required data is missing!",
+                                "missing data": "Dates for Courgette"}), 400
+            else:
+                continue
+
+    if configuration.Plant_name == "Pomme de terre":
+        required_dates = ["Plante_a_50_de_levée",
+                          "de_50_de_levée_a_50_recouvrement", "de_50_recouvrement_a_recouvrement_total",
+                          "recvroument_total_plus_30_jours", "recvroument_total_plus_30_jours_a_debut_saison",
+                          "debut_saison_a_maturite"]
+        for date in required_dates:
+            if date not in configuration_data:
+                return jsonify({"Error": "Required data is missing",
+                                "missing data": "Dates for Pomme de terre"}), 400
+            else:
+                continue
+
+    if configuration.Plant_name == "Poireau":
+        required_dates = ["reprise_a_recolte"]
+        for date in required_dates:
+            if date not in configuration_data:
+                return jsonify({"Error": "Required data is missing",
+                                "missing data": "Dates for Poireau"}), 400
+            else:
+                continue
+
+    if configuration.Plant_name == "Carotte":
+        required_dates = ["de_0_a_6_semaine_apres_semis",
+                          "de_6_semaine_au_stade", "du_stade_a_recolte"]
+        for date in required_dates:
+            if date not in configuration_data:
+                return jsonify({"Error": "Required data is missing",
+                                "missing data": "Dates for Carotte"}), 400
+            else:
+                continue
 
     url = "https://archive-api.open-meteo.com/v1/archive"
     params = {
@@ -219,8 +270,6 @@ def bilan_hydrique():
                 if interval["start_date"] <= safely_parse_date(date, date_format) <= interval["end_date"]:
                     return interval["KC"]
         return None
-
-    # Create the ETR sheet
 
     # Add a new column for the daily sum of 'direct_radiation' and 'diffuse_radiation'
     daily_data['sum_radiation'] = daily_data[[
