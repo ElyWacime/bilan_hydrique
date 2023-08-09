@@ -18,7 +18,7 @@ CORS(app)
 if not app.debug:
     file_handler = RotatingFileHandler(
         'flask.log', maxBytes=1024 * 1024 * 100, backupCount=20)
-    file_handler.setLevel(logging.ERROR)
+    file_handler.setLevel(logging.DEBUG)
     formatter = logging.Formatter(
         "%(asctime)s - %(name)s - %(levelname)s - %(message)s")
     file_handler.setFormatter(formatter)
@@ -394,8 +394,20 @@ def bilan_hydrique():
     result.index = result.index.strftime('%Y-%m-%d')
     result_json = result.to_json(orient="index")
 
+    request_body = request.get_json()
+    print(request_body)
+
     return Response(response=result_json, status=200, mimetype="application/json")
 
 
+@app.route('/test_logging')
+def test_logging():
+    app.logger.debug('DEBUG message.')
+    app.logger.info('INFO message.')
+    app.logger.warning('WARNING message.')
+    app.logger.error('ERROR message.')
+    return "Log messages generated!"
+
+
 if __name__ == "__main__":
-    app.run(debug=True, port=666)
+    app.run()

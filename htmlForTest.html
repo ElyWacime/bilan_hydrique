@@ -37,17 +37,25 @@
     .Densité_apparente_des_motes_Bool_div {
         margin-top: 10px;
     }
+
+    .input_row {
+        flex: 1;
+        padding-right: 20px;
+    }
+
+    .map_container {
+        flex: 2;
+    }
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<!-- Map display -->
-<div id="map" style="height: 400px; width: 100%;"></div>
-
-<!-- Input fields for API -->
+<div class="map_container">
+    <div id="map" style="height: 400px; width: 50%;"></div>
+</div>
 <form id="apiForm">
-    <div class="input-row">
+    <div class="input_row">
         <div class="donne_sol">
+            <h3>Données sol</h3>
             <label class="Texture_du_sol_label" for="Texture_du_sol">Texture_du_sol:</label><br>
             <select class="Texture_du_sol_select" id="Texture_du_sol" name="Texture_du_sol"
                 onchange="toggleFields(this.value)">
@@ -62,12 +70,12 @@
             </select><br>
             <div class="Pierrosité_div">
                 <label class="Pierrosité_label" for="Pierrosité">Pierrosité:</label>
-                <input class="Pierrosité_input" id="Pierrosité" type="text" name="Pierrosité">
+                <input class="Pierrosité_input" id="Pierrosité" type="text" value="5" name="Pierrosité">
                 <span class="Pierrosité_span">%</span>
             </div>
             <div class="Profondeur_des_racines_div">
                 <label class="Profondeur_des_racines_label" for="Profondeur_des_racines">Profondeur_des_racines:</label>
-                <input class="Profondeur_des_racines_input" id="Profondeur_des_racines" type="text"
+                <input class="Profondeur_des_racines_input" id="Profondeur_des_racines" type="text" value="50"
                     name="Profondeur_des_racines">
                 <span class="Profondeur_des_racines_span">cm</span>
             </div>
@@ -91,6 +99,7 @@
                 name="Densité_apparente_du_sol">
         </div>
         <div class="donne_address">
+            <h3>Address</h3>
             <label class="Latitude_label" for="Latitude">Latitude:</label>
             <input calss="Latitude_input" id="Latitude" type="text" name="Latitude">
 
@@ -98,6 +107,7 @@
             <input class="Longitude_input" id="Longitude" type="text" name="Longitude">
         </div>
         <div class="donne_instalation">
+            <h3>Instalation photovolaique</h3>
             <label class="Hauteur_de_linstallation_label"
                 for="Hauteur_de_linstallation">Hauteur_de_linstallation:</label>
             <input class="Hauteur_de_linstallation_input" id="Hauteur_de_linstallation" type="range" min="0" max="15"
@@ -110,6 +120,7 @@
             <span class="Taux_de_couverture_span" id="Taux_de_couverture_span">25</span><span>%</span>
         </div>
         <div class="donne_culture">
+            <h3>Culture</h3>
             <label class="Plant_name_label" for="Plant_name">Plant_name:</label>
             <select class="Plant_name_select" id="Plant_name" name="Plant_name" onchange="toggleFields(this.value)">
                 <option value="Courgette">Courgette</option>
@@ -119,42 +130,42 @@
             </select>
 
             <label class="start_date_label" for="start_date">start_date:</label>
-            <input class="start_date_input" id="start_date" type="text" name="start_date" placeholder="AAAA-MM-JJ">
+            <input class="start_date_input" id="start_date" type="date" name="start_date" placeholder="AAAA-MM-JJ">
 
             <label class="end_date_label" for="end_date">end_date:</label>
-            <input class="end_date_input" id="end_date" type="text" name="end_date" placeholder="AAAA-MM-JJ">
+            <input class="end_date_input" id="end_date" type="date" name="end_date" placeholder="AAAA-MM-JJ">
 
 
 
             <label class="plantation_a_fleuraison_start_label"
                 for="plantation_a_fleuraison_start">plantation_a_fleuraison_start:</label>
-            <input class="plantation_a_fleuraison_start_input" id="plantation_a_fleuraison_start" type="text"
-                name="plantation_a_fleuraison_start" placeholder="AAAA-MM-JJ">
+            <input class="plantation_a_fleuraison_start_input" id="plantation_a_fleuraison_start" type="date"
+                name="plantation_a_fleuraison_start">
 
             <label class="plantation_a_fleuraison_end_label"
                 for="plantation_a_fleuraison_end">plantation_a_fleuraison_end:</label>
-            <input class="plantation_a_fleuraison_end_input" id="plantation_a_fleuraison_end" type="text"
-                name="plantation_a_fleuraison_end" placeholder="AAAA-MM-JJ">
+            <input class="plantation_a_fleuraison_end_input" id="plantation_a_fleuraison_end" type="date"
+                name="plantation_a_fleuraison_end">
 
             <label class="fleuraison_a_mi_recolte_start_label"
                 for="fleuraison_a_mi_recolte_start">fleuraison_a_mi_recolte_start:</label>
-            <input class="fleuraison_a_mi_recolte_start_input" id="fleuraison_a_mi_recolte_start" type="text"
-                name="fleuraison_a_mi_recolte_start" placeholder="AAAA-MM-JJ">
+            <input class="fleuraison_a_mi_recolte_start_input" id="fleuraison_a_mi_recolte_start" type="date"
+                name="fleuraison_a_mi_recolte_start">
 
             <label class="fleuraison_a_mi_recolte_end_label"
                 for="fleuraison_a_mi_recolte_end">fleuraison_a_mi_recolte_end:</label>
-            <input class="fleuraison_a_mi_recolte_end_input" id="fleuraison_a_mi_recolte_end" type="text"
-                name="fleuraison_a_mi_recolte_end" placeholder="AAAA-MM-JJ">
+            <input class="fleuraison_a_mi_recolte_end_input" id="fleuraison_a_mi_recolte_end" type="date"
+                name="fleuraison_a_mi_recolte_end">
 
             <label class="mi_recolte_fin_recolte_start_label"
                 for="mi_recolte_fin_recolte_start">mi_recolte_fin_recolte_start:</label>
-            <input class="mi_recolte_fin_recolte_start_input" id="mi_recolte_fin_recolte_start" type="text"
-                name="mi_recolte_fin_recolte_start" placeholder="AAAA-MM-JJ">
+            <input class="mi_recolte_fin_recolte_start_input" id="mi_recolte_fin_recolte_start" type="date"
+                name="mi_recolte_fin_recolte_start">
 
             <label class="mi_recolte_fin_recolte_end_label"
                 for="mi_recolte_fin_recolte_end">mi_recolte_fin_recolte_end:</label>
-            <input class="mi_recolte_fin_recolte_end_input" id="mi_recolte_fin_recolte_end" type="text"
-                name="mi_recolte_fin_recolte_end" placeholder="AAAA-MM-JJ">
+            <input class="mi_recolte_fin_recolte_end_input" id="mi_recolte_fin_recolte_end" type="date"
+                name="mi_recolte_fin_recolte_end">
 
             <label class="de_0_a_6_semaine_apres_semis_start_lable"
                 for="de_0_a_6_semaine_apres_semis_start">de_0_a_6_semaine_apres_semis_start:</label>
@@ -412,7 +423,7 @@
 
         }
 
-        fetch('http://82.165.34.79/bilan_hydrique', {
+        fetch('http://127.0.0.1:5000/bilan_hydrique', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
