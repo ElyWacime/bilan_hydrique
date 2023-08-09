@@ -46,169 +46,276 @@
     .map_container {
         flex: 2;
     }
+
+    .content_container {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+    }
+
+    .map_container {
+        flex: 1;
+        /* Take up 50% of the available space */
+        margin-right: 20px;
+        /* Space between the map and the form */
+    }
+
+    #apiForm {
+        flex: 1;
+        /* Take up 50% of the available space */
+    }
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<div class="map_container">
-    <div id="map" style="height: 400px; width: 50%;"></div>
-</div>
-<form id="apiForm">
-    <div class="input_row">
-        <div class="donne_sol">
-            <h3>Données sol</h3>
-            <label class="Texture_du_sol_label" for="Texture_du_sol">Texture_du_sol:</label><br>
-            <select class="Texture_du_sol_select" id="Texture_du_sol" name="Texture_du_sol"
-                onchange="toggleFields(this.value)">
-                <option value="Argile lourde">Argile lourde</option>
-                <option value="Argile">Argile</option>
-                <option value="Argile sableuse">Argile sableuse</option>
-                <option value="Limon">Limon</option>
-                <option value="Limon sableux">Limon sableux</option>
-                <option value="Limon trés sableux">Limon trés sableux</option>
-                <option value="Sable argilo-limoneux">Sable argilo-limoneux</option>
-                <option value="Sable">Sable</option>
-            </select><br>
-            <div class="Pierrosité_div">
-                <label class="Pierrosité_label" for="Pierrosité">Pierrosité:</label>
-                <input class="Pierrosité_input" id="Pierrosité" type="text" value="5" name="Pierrosité">
-                <span class="Pierrosité_span">%</span>
-            </div>
-            <div class="Profondeur_des_racines_div">
-                <label class="Profondeur_des_racines_label" for="Profondeur_des_racines">Profondeur_des_racines:</label>
-                <input class="Profondeur_des_racines_input" id="Profondeur_des_racines" type="text" value="50"
-                    name="Profondeur_des_racines">
-                <span class="Profondeur_des_racines_span">cm</span>
-            </div>
-            <div class="Densité_apparente_des_motes_Bool_div">
-                <label class="Densité_apparente_des_motes_Bool_label"
-                    for="Densité_apparente_des_motes_Bool">Densité_apparente_des_motes_Bool:</label>
-                <select class="Densité_apparente_des_motes_Bool_select" id="Densité_apparente_des_motes_Bool"
-                    name="Densité_apparente_des_motes_Bool" onchange="toggleFields(this.value)">
-                    <option value="non">Non</option>
-                    <option value="oui">Oui</option>
-                </select>
-            </div>
-            <label class="Densité_apparente_des_motes_label"
-                for="Densité_apparente_des_motes">Densité_apparente_des_motes:</label>
-            <input class="Densité_apparente_des_motes_input" id="Densité_apparente_des_motes" type="text" step="0.01"
-                name="Densité_apparente_des_motes">
-
-            <label class="Densité_apparente_du_sol_lable"
-                for="Densité_apparente_du_sol">Densité_apparente_du_sol:</label>
-            <input class="Densité_apparente_du_sol_input" id="Densité_apparente_du_sol" type="text"
-                name="Densité_apparente_du_sol">
-        </div>
-        <div class="donne_address">
-            <h3>Address</h3>
-            <label class="Latitude_label" for="Latitude">Latitude:</label>
-            <input calss="Latitude_input" id="Latitude" type="text" name="Latitude">
-
-            <label class="Longitude_label" for="Longitude">Longitude:</label>
-            <input class="Longitude_input" id="Longitude" type="text" name="Longitude">
-        </div>
-        <div class="donne_instalation">
-            <h3>Instalation photovolaique</h3>
-            <label class="Hauteur_de_linstallation_label"
-                for="Hauteur_de_linstallation">Hauteur_de_linstallation:</label>
-            <input class="Hauteur_de_linstallation_input" id="Hauteur_de_linstallation" type="range" min="0" max="15"
-                value="3" name="Hauteur_de_linstallation">
-            <span class="Hauteur_de_linstallation_span" id="Hauteur_de_linstallation_span">3</span><span>m</span>
-
-            <label class="Taux_de_couverture_label" for="Taux_de_couverture">Taux_de_couverture:</label>
-            <input class="Taux_de_couverture_input" id="Taux_de_couverture" type="range" min="0" max="100" value="25"
-                name="Taux_de_couverture">
-            <span class="Taux_de_couverture_span" id="Taux_de_couverture_span">25</span><span>%</span>
-        </div>
-        <div class="donne_culture">
-            <h3>Culture</h3>
-            <label class="Plant_name_label" for="Plant_name">Plant_name:</label>
-            <select class="Plant_name_select" id="Plant_name" name="Plant_name" onchange="toggleFields(this.value)">
-                <option value="Courgette">Courgette</option>
-                <option value="Poireau">Poireau</option>
-                <option value="Carotte">Carotte</option>
-                <option value="Pomme de terre">Pomme de terre</option>
-            </select>
-
-            <label class="start_date_label" for="start_date">start_date:</label>
-            <input class="start_date_input" id="start_date" type="date" name="start_date" placeholder="AAAA-MM-JJ">
-
-            <label class="end_date_label" for="end_date">end_date:</label>
-            <input class="end_date_input" id="end_date" type="date" name="end_date" placeholder="AAAA-MM-JJ">
-
-
-
-            <label class="plantation_a_fleuraison_start_label"
-                for="plantation_a_fleuraison_start">plantation_a_fleuraison_start:</label>
-            <input class="plantation_a_fleuraison_start_input" id="plantation_a_fleuraison_start" type="date"
-                name="plantation_a_fleuraison_start">
-
-            <label class="plantation_a_fleuraison_end_label"
-                for="plantation_a_fleuraison_end">plantation_a_fleuraison_end:</label>
-            <input class="plantation_a_fleuraison_end_input" id="plantation_a_fleuraison_end" type="date"
-                name="plantation_a_fleuraison_end">
-
-            <label class="fleuraison_a_mi_recolte_start_label"
-                for="fleuraison_a_mi_recolte_start">fleuraison_a_mi_recolte_start:</label>
-            <input class="fleuraison_a_mi_recolte_start_input" id="fleuraison_a_mi_recolte_start" type="date"
-                name="fleuraison_a_mi_recolte_start">
-
-            <label class="fleuraison_a_mi_recolte_end_label"
-                for="fleuraison_a_mi_recolte_end">fleuraison_a_mi_recolte_end:</label>
-            <input class="fleuraison_a_mi_recolte_end_input" id="fleuraison_a_mi_recolte_end" type="date"
-                name="fleuraison_a_mi_recolte_end">
-
-            <label class="mi_recolte_fin_recolte_start_label"
-                for="mi_recolte_fin_recolte_start">mi_recolte_fin_recolte_start:</label>
-            <input class="mi_recolte_fin_recolte_start_input" id="mi_recolte_fin_recolte_start" type="date"
-                name="mi_recolte_fin_recolte_start">
-
-            <label class="mi_recolte_fin_recolte_end_label"
-                for="mi_recolte_fin_recolte_end">mi_recolte_fin_recolte_end:</label>
-            <input class="mi_recolte_fin_recolte_end_input" id="mi_recolte_fin_recolte_end" type="date"
-                name="mi_recolte_fin_recolte_end">
-
-            <label class="de_0_a_6_semaine_apres_semis_start_lable"
-                for="de_0_a_6_semaine_apres_semis_start">de_0_a_6_semaine_apres_semis_start:</label>
-            <input class="de_0_a_6_semaine_apres_semis_start_input" id="de_0_a_6_semaine_apres_semis_start" type="text"
-                name="de_0_a_6_semaine_apres_semis_start" placeholder="AAAA-MM-JJ">
-
-            <label class="de_0_a_6_semaine_apres_semis_end_label"
-                for="de_0_a_6_semaine_apres_semis_end">de_0_a_6_semaine_apres_semis_end:</label>
-            <input class="de_0_a_6_semaine_apres_semis_end_input" id="de_0_a_6_semaine_apres_semis_end" type="text"
-                name="de_0_a_6_semaine_apres_semis_end" placeholder="AAAA-MM-JJ">
-
-            <label class="de_6_semaine_au_stade_start_label"
-                for="de_6_semaine_au_stade_start">de_6_semaine_au_stade_start:</label>
-            <input class="de_6_semaine_au_stade_start_input" id="de_6_semaine_au_stade_start" type="text"
-                name="de_6_semaine_au_stade_start" placeholder="AAAA-MM-JJ">
-
-            <label class="de_6_semaine_au_stade_end_label"
-                for="de_6_semaine_au_stade_end">de_6_semaine_au_stade_end:</label>
-            <input class="de_6_semaine_au_stade_end_input" id="de_6_semaine_au_stade_end" type="text"
-                name="de_6_semaine_au_stade_end" placeholder="AAAA-MM-JJ">
-
-            <label class="du_stade_a_recolte_start_label"
-                for="du_stade_a_recolte_start">du_stade_a_recolte_start:</label>
-            <input class="du_stade_a_recolte_start_input" id="du_stade_a_recolte_start" type="text"
-                name="du_stade_a_recolte_start" placeholder="AAAA-MM-JJ">
-
-            <label class="du_stade_a_recolte_end_label" for="du_stade_a_recolte_end">du_stade_a_recolte_end:</label>
-            <input class="du_stade_a_recolte_end_input" id="du_stade_a_recolte_end" type="text"
-                name="du_stade_a_recolte_end" placeholder="AAAA-MM-JJ">
-
-
-
-            <label class="reprise_a_recolte_start_label" for="reprise_a_recolte_start">reprise_a_recolte_start:</label>
-            <input class="reprise_a_recolte_start_input" id="reprise_a_recolte_start" type="text"
-                name="reprise_a_recolte_start" placeholder="AAAA-MM-JJ">
-
-            <label class="reprise_a_recolte_end_label" for="reprise_a_recolte_end">reprise_a_recolte_end:</label>
-            <input class="reprise_a_recolte_end_input" id="reprise_a_recolte_end" type="text"
-                name="reprise_a_recolte_end" placeholder="AAAA-MM-JJ">
-        </div>
-        <input class="submit_button" type="submit" value="Submit">
+<div class="content_container">
+    <div class="map_container">
+        <div id="map" style="height: 700px; width: 100%;"></div>
     </div>
-</form>
+    <form id="apiForm">
+        <div class="input_row">
+            <div class="donne_sol">
+                <h3>Données sol</h3>
+                <label class="Texture_du_sol_label" for="Texture_du_sol">Texture_du_sol:</label><br>
+                <select class="Texture_du_sol_select" id="Texture_du_sol" name="Texture_du_sol"
+                    onchange="toggleFields(this.value)">
+                    <option value="Argile lourde">Argile lourde</option>
+                    <option value="Argile">Argile</option>
+                    <option value="Argile sableuse">Argile sableuse</option>
+                    <option value="Limon">Limon</option>
+                    <option value="Limon sableux">Limon sableux</option>
+                    <option value="Limon trés sableux">Limon trés sableux</option>
+                    <option value="Sable argilo-limoneux">Sable argilo-limoneux</option>
+                    <option value="Sable">Sable</option>
+                </select><br>
+                <div class="Pierrosité_div">
+                    <label class="Pierrosité_label" for="Pierrosité">Pierrosité:</label>
+                    <input class="Pierrosité_input" id="Pierrosité" type="text" value="5" name="Pierrosité">
+                    <span class="Pierrosité_span">%</span>
+                </div>
+                <div class="Profondeur_des_racines_div">
+                    <label class="Profondeur_des_racines_label"
+                        for="Profondeur_des_racines">Profondeur_des_racines:</label>
+                    <input class="Profondeur_des_racines_input" id="Profondeur_des_racines" type="text" value="50"
+                        name="Profondeur_des_racines">
+                    <span class="Profondeur_des_racines_span">cm</span>
+                </div>
+                <div class="Densité_apparente_des_motes_Bool_div">
+                    <label class="Densité_apparente_des_motes_Bool_label"
+                        for="Densité_apparente_des_motes_Bool">Densité_apparente_des_motes_Bool:</label>
+                    <select class="Densité_apparente_des_motes_Bool_select" id="Densité_apparente_des_motes_Bool"
+                        name="Densité_apparente_des_motes_Bool" onchange="toggleFields(this.value)">
+                        <option value="non">Non</option>
+                        <option value="oui">Oui</option>
+                    </select>
+                </div>
+                <label class="Densité_apparente_des_motes_label"
+                    for="Densité_apparente_des_motes">Densité_apparente_des_motes:</label>
+                <input class="Densité_apparente_des_motes_input" id="Densité_apparente_des_motes" type="text"
+                    step="0.01" name="Densité_apparente_des_motes">
+
+                <label class="Densité_apparente_du_sol_lable"
+                    for="Densité_apparente_du_sol">Densité_apparente_du_sol:</label>
+                <input class="Densité_apparente_du_sol_input" id="Densité_apparente_du_sol" type="text"
+                    name="Densité_apparente_du_sol">
+            </div>
+            <div class="donne_address">
+                <h3>Address</h3>
+                <label class="Latitude_label" for="Latitude">Latitude:</label>
+                <input calss="Latitude_input" id="Latitude" type="text" name="Latitude">
+
+                <label class="Longitude_label" for="Longitude">Longitude:</label>
+                <input class="Longitude_input" id="Longitude" type="text" name="Longitude">
+            </div>
+            <div class="donne_instalation">
+                <h3>Instalation photovolaique</h3>
+                <label class="Hauteur_de_linstallation_label"
+                    for="Hauteur_de_linstallation">Hauteur_de_linstallation:</label>
+                <input class="Hauteur_de_linstallation_input" id="Hauteur_de_linstallation" type="range" min="0"
+                    max="15" value="3" name="Hauteur_de_linstallation">
+                <span class="Hauteur_de_linstallation_span" id="Hauteur_de_linstallation_span">3</span><span>m</span>
+
+                <label class="Taux_de_couverture_label" for="Taux_de_couverture">Taux_de_couverture:</label>
+                <input class="Taux_de_couverture_input" id="Taux_de_couverture" type="range" min="0" max="100"
+                    value="25" name="Taux_de_couverture">
+                <span class="Taux_de_couverture_span" id="Taux_de_couverture_span">25</span><span>%</span>
+            </div>
+            <div class="donne_culture">
+                <h3>Culture</h3>
+                <label class="Plant_name_label" for="Plant_name">Plant_name:</label>
+                <select class="Plant_name_select" id="Plant_name" name="Plant_name" onchange="toggleFields(this.value)">
+                    <option value="Courgette">Courgette</option>
+                    <option value="Poireau">Poireau</option>
+                    <option value="Carotte">Carotte</option>
+                    <option value="Pomme de terre">Pomme de terre</option>
+                </select>
+
+                <label class="start_date_label" for="start_date">start_date:</label>
+                <input class="start_date_input" id="start_date" type="date" name="start_date">
+
+                <label class="end_date_label" for="end_date">end_date:</label>
+                <input class="end_date_input" id="end_date" type="date" name="end_date">
+
+
+
+                <label class="plantation_a_fleuraison_start_label"
+                    for="plantation_a_fleuraison_start">plantation_a_fleuraison_start:</label>
+                <input class="plantation_a_fleuraison_start_input" id="plantation_a_fleuraison_start" type="date"
+                    name="plantation_a_fleuraison_start">
+
+                <label class="plantation_a_fleuraison_end_label"
+                    for="plantation_a_fleuraison_end">plantation_a_fleuraison_end:</label>
+                <input class="plantation_a_fleuraison_end_input" id="plantation_a_fleuraison_end" type="date"
+                    name="plantation_a_fleuraison_end">
+
+                <label class="fleuraison_a_mi_recolte_start_label"
+                    for="fleuraison_a_mi_recolte_start">fleuraison_a_mi_recolte_start:</label>
+                <input class="fleuraison_a_mi_recolte_start_input" id="fleuraison_a_mi_recolte_start" type="date"
+                    name="fleuraison_a_mi_recolte_start">
+
+                <label class="fleuraison_a_mi_recolte_end_label"
+                    for="fleuraison_a_mi_recolte_end">fleuraison_a_mi_recolte_end:</label>
+                <input class="fleuraison_a_mi_recolte_end_input" id="fleuraison_a_mi_recolte_end" type="date"
+                    name="fleuraison_a_mi_recolte_end">
+
+                <label class="mi_recolte_fin_recolte_start_label"
+                    for="mi_recolte_fin_recolte_start">mi_recolte_fin_recolte_start:</label>
+                <input class="mi_recolte_fin_recolte_start_input" id="mi_recolte_fin_recolte_start" type="date"
+                    name="mi_recolte_fin_recolte_start">
+
+                <label class="mi_recolte_fin_recolte_end_label"
+                    for="mi_recolte_fin_recolte_end">mi_recolte_fin_recolte_end:</label>
+                <input class="mi_recolte_fin_recolte_end_input" id="mi_recolte_fin_recolte_end" type="date"
+                    name="mi_recolte_fin_recolte_end">
+
+                <label class="de_0_a_6_semaine_apres_semis_start_lable"
+                    for="de_0_a_6_semaine_apres_semis_start">de_0_a_6_semaine_apres_semis_start:</label>
+                <input class="de_0_a_6_semaine_apres_semis_start_input" id="de_0_a_6_semaine_apres_semis_start"
+                    type="date" name="de_0_a_6_semaine_apres_semis_start">
+
+                <label class="de_0_a_6_semaine_apres_semis_end_label"
+                    for="de_0_a_6_semaine_apres_semis_end">de_0_a_6_semaine_apres_semis_end:</label>
+                <input class="de_0_a_6_semaine_apres_semis_end_input" id="de_0_a_6_semaine_apres_semis_end" type="date"
+                    name="de_0_a_6_semaine_apres_semis_end">
+
+                <label class="de_6_semaine_au_stade_start_label"
+                    for="de_6_semaine_au_stade_start">de_6_semaine_au_stade_start:</label>
+                <input class="de_6_semaine_au_stade_start_input" id="de_6_semaine_au_stade_start" type="date"
+                    name="de_6_semaine_au_stade_start">
+
+                <label class="de_6_semaine_au_stade_end_label"
+                    for="de_6_semaine_au_stade_end">de_6_semaine_au_stade_end:</label>
+                <input class="de_6_semaine_au_stade_end_input" id="de_6_semaine_au_stade_end" type="date"
+                    name="de_6_semaine_au_stade_end">
+
+                <label class="du_stade_a_recolte_start_label"
+                    for="du_stade_a_recolte_start">du_stade_a_recolte_start:</label>
+                <input class="du_stade_a_recolte_start_input" id="du_stade_a_recolte_start" type="date"
+                    name="du_stade_a_recolte_start">
+
+                <label class="du_stade_a_recolte_end_label" for="du_stade_a_recolte_end">du_stade_a_recolte_end:</label>
+                <input class="du_stade_a_recolte_end_input" id="du_stade_a_recolte_end" type="date"
+                    name="du_stade_a_recolte_end">
+
+
+                <div>
+                    <label class="reprise_a_recolte_start_label"
+                        for="reprise_a_recolte_start">reprise_a_recolte_start:</label>
+                    <input class="reprise_a_recolte_start_input" id="reprise_a_recolte_start" type="date"
+                        name="reprise_a_recolte_start">
+                </div>
+                <div>
+                    <label class="reprise_a_recolte_end_label"
+                        for="reprise_a_recolte_end">reprise_a_recolte_end:</label>
+                    <input class="reprise_a_recolte_end_input" id="reprise_a_recolte_end" type="date"
+                        name="reprise_a_recolte_end">
+                </div>
+
+
+
+                <div>
+                    <label class="Plante_a_50_de_levée_start_label"
+                        for="Plante_a_50_de_levée_start">Plante_a_50_de_levée_start</label>
+                    <input class="Plante_a_50_de_levée_start_input" id="Plante_a_50_de_levée_start" type="date"
+                        name="Plante_a_50_de_levée_start">
+                </div>
+                <div>
+                    <label class="Plante_a_50_de_levée_end_label"
+                        for="Plante_a_50_de_levée_end">Plante_a_50_de_levée_end</label>
+                    <input class="Plante_a_50_de_levée_end_input" id="Plante_a_50_de_levée_end" type="date"
+                        name="Plante_a_50_de_levée_end">
+                </div>
+                <div>
+                    <label class="de_50_de_levée_a_50_recouvrement_start_label"
+                        for="de_50_de_levée_a_50_recouvrement_start">de_50_de_levée_a_50_recouvrement_start</label>
+                    <input class="de_50_de_levée_a_50_recouvrement_start_input"
+                        id="de_50_de_levée_a_50_recouvrement_start" type="date"
+                        name="de_50_de_levée_a_50_recouvrement_start">
+                </div>
+                <div>
+                    <label class="de_50_de_levée_a_50_recouvrement_end_label"
+                        for="de_50_de_levée_a_50_recouvrement_end">de_50_de_levée_a_50_recouvrement_end</label>
+                    <input class="de_50_de_levée_a_50_recouvrement_end_input" id="de_50_de_levée_a_50_recouvrement_end"
+                        type="date" name="de_50_de_levée_a_50_recouvrement_end">
+                </div>
+                <div>
+                    <label class="de_50_recouvrement_a_recouvrement_total_start_label"
+                        for="de_50_recouvrement_a_recouvrement_total_start">de_50_recouvrement_a_recouvrement_total_start</label>
+                    <input class="de_50_recouvrement_a_recouvrement_total_start_input"
+                        id="de_50_recouvrement_a_recouvrement_total_start" type="date"
+                        name="de_50_recouvrement_a_recouvrement_total_start">
+                </div>
+                <div>
+                    <label class="de_50_recouvrement_a_recouvrement_total_end_label"
+                        for="de_50_recouvrement_a_recouvrement_total_end">de_50_recouvrement_a_recouvrement_total_end</label>
+                    <input class="de_50_recouvrement_a_recouvrement_total_end_input"
+                        id="de_50_recouvrement_a_recouvrement_total_end" type="date"
+                        name="de_50_recouvrement_a_recouvrement_total_end">
+                </div>
+                <div>
+                    <label class="recvroument_total_plus_30_jours_start_label"
+                        for="recvroument_total_plus_30_jours_start">recvroument_total_plus_30_jours_start</label>
+                    <input class="recvroument_total_plus_30_jours_start_input"
+                        id="recvroument_total_plus_30_jours_start" type="date"
+                        name="recvroument_total_plus_30_jours_start">
+                </div>
+                <div>
+                    <label class="recvroument_total_plus_30_jours_end_label"
+                        for="recvroument_total_plus_30_jours_end">recvroument_total_plus_30_jours_end</label>
+                    <input class="recvroument_total_plus_30_jours_end_input" id="recvroument_total_plus_30_jours_end"
+                        type="date" name="recvroument_total_plus_30_jours_end">
+                </div>
+                <div>
+                    <label class="recvroument_total_plus_30_jours_a_debut_saison_start_label"
+                        for="recvroument_total_plus_30_jours_a_debut_saison_start">recvroument_total_plus_30_jours_a_debut_saison_start</label>
+                    <input class="recvroument_total_plus_30_jours_a_debut_saison_start_input"
+                        id="recvroument_total_plus_30_jours_a_debut_saison_start" type="date"
+                        name="recvroument_total_plus_30_jours_a_debut_saison_start">
+                </div>
+                <div>
+                    <label class="recvroument_total_plus_30_jours_a_debut_saison_end_label"
+                        for="recvroument_total_plus_30_jours_a_debut_saison_end">recvroument_total_plus_30_jours_a_debut_saison_end</label>
+                    <input class="recvroument_total_plus_30_jours_a_debut_saison_end_input"
+                        id="recvroument_total_plus_30_jours_a_debut_saison_end" type="date"
+                        name="recvroument_total_plus_30_jours_a_debut_saison_end">
+                </div>
+                <div>
+                    <label class="debut_saison_a_maturite_start_label"
+                        for="debut_saison_a_maturite_start">debut_saison_a_maturite_start</label>
+                    <input class="debut_saison_a_maturite_start_input" id="debut_saison_a_maturite_start" type="date"
+                        name="debut_saison_a_maturite_start">
+                </div>
+                <div>
+                    <label class="debut_saison_a_maturite_end_label"
+                        for="debut_saison_a_maturite_end">debut_saison_a_maturite_end</label>
+                    <input class="debut_saison_a_maturite_end_input" id="debut_saison_a_maturite_end" type="date"
+                        name="debut_saison_a_maturite_end">
+                </div>
+
+            </div>
+            <input class="submit_button" type="submit" value="Submit">
+        </div>
+    </form>
+</div>
 
 <canvas id="myChart"></canvas>
 
@@ -219,6 +326,7 @@
         carotteFields(document.getElementById('Plant_name').value);
         courgetteFields(document.getElementById('Plant_name').value);
         poireauxFields(document.getElementById('Plant_name').value);
+        pommeDeTerreFields(document.getElementById('Plant_name').value);
 
         document.getElementById('Densité_apparente_des_motes_Bool').addEventListener('change', function () {
             toggleFields(this.value);
@@ -228,6 +336,7 @@
             carotteFields(this.value);
             courgetteFields(this.value);
             poireauxFields(this.value);
+            pommeDeTerreFields(this.value);
         });
 
     });
@@ -250,6 +359,100 @@
             densiteSolLabel.style.display = 'none';
         }
 
+    }
+
+    function pommeDeTerreFields(value) {
+        const Plante_a_50_de_levée_start_label = document.querySelector('label[for="Plante_a_50_de_levée_start"]');
+        const Plante_a_50_de_levée_start_input = document.getElementById("Plante_a_50_de_levée_start");
+        const Plante_a_50_de_levée_end_label = document.querySelector('label[for="Plante_a_50_de_levée_end"]');
+        const Plante_a_50_de_levée_end_input = document.getElementById('Plante_a_50_de_levée_end');
+
+        const de_50_de_levée_a_50_recouvrement_start_label = document.querySelector('label[for="de_50_de_levée_a_50_recouvrement_start"]');
+        const de_50_de_levée_a_50_recouvrement_start_input = document.getElementById('de_50_de_levée_a_50_recouvrement_start');
+        const de_50_de_levée_a_50_recouvrement_end_label = document.querySelector('label[for="de_50_de_levée_a_50_recouvrement_end"]');
+        const de_50_de_levée_a_50_recouvrement_end_input = document.getElementById('de_50_de_levée_a_50_recouvrement_end');
+
+        const de_50_recouvrement_a_recouvrement_total_start_label = document.querySelector('label[for="de_50_recouvrement_a_recouvrement_total_start"]');
+        const de_50_recouvrement_a_recouvrement_total_start_input = document.getElementById('de_50_recouvrement_a_recouvrement_total_start');
+        const de_50_recouvrement_a_recouvrement_total_end_label = document.querySelector('label[for="de_50_recouvrement_a_recouvrement_total_end"]');
+        const de_50_recouvrement_a_recouvrement_total_end_input = document.getElementById('de_50_recouvrement_a_recouvrement_total_end');
+
+        const recvroument_total_plus_30_jours_start_label = document.querySelector('label[for="recvroument_total_plus_30_jours_start"]');
+        const recvroument_total_plus_30_jours_start_input = document.getElementById('recvroument_total_plus_30_jours_start');
+        const recvroument_total_plus_30_jours_end_label = document.querySelector('label[for="recvroument_total_plus_30_jours_end"]');
+        const recvroument_total_plus_30_jours_end_input = document.getElementById('recvroument_total_plus_30_jours_end');
+
+        const recvroument_total_plus_30_jours_a_debut_saison_start_label = document.querySelector('label[for="recvroument_total_plus_30_jours_a_debut_saison_start"]');
+        const recvroument_total_plus_30_jours_a_debut_saison_start_input = document.getElementById('recvroument_total_plus_30_jours_a_debut_saison_start');
+        const recvroument_total_plus_30_jours_a_debut_saison_end_label = document.querySelector('label[for="recvroument_total_plus_30_jours_a_debut_saison_end"]');
+        const recvroument_total_plus_30_jours_a_debut_saison_end_input = document.getElementById('recvroument_total_plus_30_jours_a_debut_saison_end');
+
+        const debut_saison_a_maturite_start_label = document.querySelector('label[for="debut_saison_a_maturite_start"]');
+        const debut_saison_a_maturite_start_input = document.getElementById('debut_saison_a_maturite_start');
+        const debut_saison_a_maturite_end_label = document.querySelector('label[for="debut_saison_a_maturite_end"]');
+        const debut_saison_a_maturite_end_input = document.getElementById('debut_saison_a_maturite_end');
+
+        if (value === "Pomme de terre") {
+            Plante_a_50_de_levée_start_label.style.display = 'block';
+            Plante_a_50_de_levée_start_input.style.display = 'block';
+            Plante_a_50_de_levée_end_label.style.display = 'block';
+            Plante_a_50_de_levée_end_input.style.display = 'block';
+
+            de_50_de_levée_a_50_recouvrement_start_label.style.display = 'block';
+            de_50_de_levée_a_50_recouvrement_start_input.style.display = 'block';
+            de_50_de_levée_a_50_recouvrement_end_label.style.display = 'block';
+            de_50_de_levée_a_50_recouvrement_end_input.style.display = 'block';
+
+            de_50_recouvrement_a_recouvrement_total_start_label.style.display = 'block';
+            de_50_recouvrement_a_recouvrement_total_start_input.style.display = 'block';
+            de_50_recouvrement_a_recouvrement_total_end_label.style.display = 'block';
+            de_50_recouvrement_a_recouvrement_total_end_input.style.display = 'block';
+
+            recvroument_total_plus_30_jours_start_label.style.display = 'block';
+            recvroument_total_plus_30_jours_start_input.style.display = 'block';
+            recvroument_total_plus_30_jours_end_label.style.display = 'block';
+            recvroument_total_plus_30_jours_end_input.style.display = 'block';
+
+            recvroument_total_plus_30_jours_a_debut_saison_start_label.style.display = 'block';
+            recvroument_total_plus_30_jours_a_debut_saison_start_input.style.display = 'block';
+            recvroument_total_plus_30_jours_a_debut_saison_end_label.style.display = 'block';
+            recvroument_total_plus_30_jours_a_debut_saison_end_input.style.display = 'block';
+
+            debut_saison_a_maturite_start_label.style.display = 'block';
+            debut_saison_a_maturite_start_input.style.display = 'block';
+            debut_saison_a_maturite_end_label.style.display = 'block';
+            debut_saison_a_maturite_end_input.style.display = 'block';
+        } else {
+            Plante_a_50_de_levée_start_label.style.display = 'none';
+            Plante_a_50_de_levée_start_input.style.display = 'none';
+            Plante_a_50_de_levée_end_label.style.display = 'none';
+            Plante_a_50_de_levée_end_input.style.display = 'none';
+
+            de_50_de_levée_a_50_recouvrement_start_label.style.display = 'none';
+            de_50_de_levée_a_50_recouvrement_start_input.style.display = 'none';
+            de_50_de_levée_a_50_recouvrement_end_label.style.display = 'none';
+            de_50_de_levée_a_50_recouvrement_end_input.style.display = 'none';
+
+            de_50_recouvrement_a_recouvrement_total_start_label.style.display = 'none';
+            de_50_recouvrement_a_recouvrement_total_start_input.style.display = 'none';
+            de_50_recouvrement_a_recouvrement_total_end_label.style.display = 'none';
+            de_50_recouvrement_a_recouvrement_total_end_input.style.display = 'none';
+
+            recvroument_total_plus_30_jours_start_label.style.display = 'none';
+            recvroument_total_plus_30_jours_start_input.style.display = 'none';
+            recvroument_total_plus_30_jours_end_label.style.display = 'none';
+            recvroument_total_plus_30_jours_end_input.style.display = 'none';
+
+            recvroument_total_plus_30_jours_a_debut_saison_start_label.style.display = 'none';
+            recvroument_total_plus_30_jours_a_debut_saison_start_input.style.display = 'none';
+            recvroument_total_plus_30_jours_a_debut_saison_end_label.style.display = 'none';
+            recvroument_total_plus_30_jours_a_debut_saison_end_input.style.display = 'none';
+
+            debut_saison_a_maturite_start_label.style.display = 'none';
+            debut_saison_a_maturite_start_input.style.display = 'none';
+            debut_saison_a_maturite_end_label.style.display = 'none';
+            debut_saison_a_maturite_end_input.style.display = 'none';
+        }
     }
 
     function carotteFields(value) {
@@ -421,6 +624,15 @@
         } else if (plantName === 'Poireau') {
             configuration_data["reprise_a_recolte"] = [document.getElementById('reprise_a_recolte_start').value, document.getElementById('reprise_a_recolte_end').value];
 
+        } else if (plantName === "Pomme de terre") {
+            configuration_data["Plante_a_50_de_levée"] = [document.getElementById('Plante_a_50_de_levée_start').value, document.getElementById('Plante_a_50_de_levée_end').value];
+            configuration_data["de_50_de_levée_a_50_recouvrement"] = [document.getElementById('de_50_de_levée_a_50_recouvrement_start').value, document.getElementById('de_50_de_levée_a_50_recouvrement_end').value];
+
+            configuration_data["de_50_recouvrement_a_recouvrement_total"] = [document.getElementById('de_50_recouvrement_a_recouvrement_total_start').value, document.getElementById('de_50_recouvrement_a_recouvrement_total_end').value];
+            configuration_data["recvroument_total_plus_30_jours"] = [document.getElementById('recvroument_total_plus_30_jours_start').value, document.getElementById('recvroument_total_plus_30_jours_end').value];
+
+            configuration_data["recvroument_total_plus_30_jours_a_debut_saison"] = [document.getElementById('recvroument_total_plus_30_jours_a_debut_saison_start').value, document.getElementById('recvroument_total_plus_30_jours_a_debut_saison_end').value];
+            configuration_data["debut_saison_a_maturite"] = [document.getElementById('debut_saison_a_maturite_start').value, document.getElementById('debut_saison_a_maturite_end').value];
         }
 
         fetch('http://127.0.0.1:5000/bilan_hydrique', {
