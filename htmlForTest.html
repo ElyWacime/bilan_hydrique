@@ -1,50 +1,36 @@
 <style>
-    .donne_sol {
-        margin-top: 20px;
-        margin-bottom: 20px;
-        margin-left: 150px;
-    }
-
-    .Texture_du_sol_label {}
-
-    .donne_address {
-        margin-bottom: 20px;
-        margin-left: 150px;
-    }
-
-    .donne_instalation {
-        margin-bottom: 20px;
-        margin-left: 150px;
-    }
-
-    .donne_culture {
-        margin-bottom: 20px;
-        margin-left: 150px;
-    }
-
-    .submit_button {
-        margin-left: 150px;
-    }
-
-    .Pierrosité_div {
-        margin-top: 10px;
-    }
-
-    .Profondeur_des_racines_div {
-        margin-top: 10px;
-    }
-
-    .Densité_apparente_des_motes_Bool_div {
-        margin-top: 10px;
-    }
-
     .input_row {
         flex: 1;
-        padding-right: 20px;
+        margin-left: 150px;
     }
 
-    .map_container {
-        flex: 2;
+    .content_container {
+        background-color: #1d7963;
+    }
+
+    .input_row input {
+        border-radius: 15px;
+        padding: 5px 10px;
+        width: 100px;
+        height: 30px;
+    }
+
+    .input_row select {
+        border-radius: 15px;
+        padding: 5px 10px;
+        height: 30px;
+        width: 150px;
+    }
+
+    .input_row label {
+        font-family: Baloo 2;
+        font-size: 16px;
+        font-weight: 450;
+
+    }
+
+    .input_row h2 {
+        font-size: 22px;
     }
 
     .content_container {
@@ -55,92 +41,146 @@
 
     .map_container {
         flex: 1;
-        /* Take up 50% of the available space */
         margin-right: 20px;
-        /* Space between the map and the form */
     }
 
-    #apiForm {
-        flex: 1;
-        /* Take up 50% of the available space */
+    .submit_button {
+        background-color: #1d7963;
+        color: white;
+        font-family: montserrat;
+        height: 40px;
+    }
+
+    .submit_button:hover {
+        background-color: #FFFFFF;
+        color: black;
+    }
+
+    .Pierrosité_input {
+        margin-bottom: 5px;
+        margin-left: 130px;
+    }
+
+    .Pierrosité_label {
+        margin-bottom: 5px;
+    }
+
+    .Profondeur_des_racines_input {
+        margin-left: 15px;
+    }
+
+    .donne_culture input {
+        border-radius: 15px;
+        padding: 5px 10px;
+        width: 150px;
+        height: 30px;
+    }
+
+    .donne_culture label {
+        font-family: Baloo 2;
+        font-size: 16px;
+        font-weight: 450;
+    }
+
+    .donne_culture select {
+        border-radius: 15px;
+        padding: 5px 10px;
+        height: 30px;
+        width: 150px;
+    }
+
+    .donne_culture {
+        margin-right: 200px;
+    }
+
+    .donne_culture h2 {
+        font-size: 22px;
+    }
+
+    .donne_culture>* {
+        margin: 5px;
     }
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<div class="content_container">
-    <div class="map_container">
-        <div id="map" style="height: 700px; width: 100%;"></div>
-    </div>
-    <form id="apiForm">
+<form id="apiForm">
+    <div class="content_container">
+
+        <div class="map_container">
+            <div id="map" style="height: 700px; width: 100%;"></div>
+        </div>
+
         <div class="input_row">
             <div class="donne_sol">
-                <h3>Données sol</h3>
-                <label class="Texture_du_sol_label" for="Texture_du_sol">Texture_du_sol:</label><br>
-                <select class="Texture_du_sol_select" id="Texture_du_sol" name="Texture_du_sol"
-                    onchange="toggleFields(this.value)">
-                    <option value="Argile lourde">Argile lourde</option>
-                    <option value="Argile">Argile</option>
-                    <option value="Argile sableuse">Argile sableuse</option>
-                    <option value="Limon">Limon</option>
-                    <option value="Limon sableux">Limon sableux</option>
-                    <option value="Limon trés sableux">Limon trés sableux</option>
-                    <option value="Sable argilo-limoneux">Sable argilo-limoneux</option>
-                    <option value="Sable">Sable</option>
-                </select><br>
-                <div class="Pierrosité_div">
-                    <label class="Pierrosité_label" for="Pierrosité">Pierrosité:</label>
-                    <input class="Pierrosité_input" id="Pierrosité" type="text" value="5" name="Pierrosité">
-                    <span class="Pierrosité_span">%</span>
-                </div>
-                <div class="Profondeur_des_racines_div">
-                    <label class="Profondeur_des_racines_label"
-                        for="Profondeur_des_racines">Profondeur_des_racines:</label>
-                    <input class="Profondeur_des_racines_input" id="Profondeur_des_racines" type="text" value="50"
-                        name="Profondeur_des_racines">
-                    <span class="Profondeur_des_racines_span">cm</span>
-                </div>
-                <div class="Densité_apparente_des_motes_Bool_div">
-                    <label class="Densité_apparente_des_motes_Bool_label"
-                        for="Densité_apparente_des_motes_Bool">Densité_apparente_des_motes_Bool:</label>
-                    <select class="Densité_apparente_des_motes_Bool_select" id="Densité_apparente_des_motes_Bool"
-                        name="Densité_apparente_des_motes_Bool" onchange="toggleFields(this.value)">
-                        <option value="non">Non</option>
-                        <option value="oui">Oui</option>
-                    </select>
-                </div>
-                <label class="Densité_apparente_des_motes_label"
-                    for="Densité_apparente_des_motes">Densité_apparente_des_motes:</label>
-                <input class="Densité_apparente_des_motes_input" id="Densité_apparente_des_motes" type="text"
-                    step="0.01" name="Densité_apparente_des_motes">
-
-                <label class="Densité_apparente_du_sol_lable"
-                    for="Densité_apparente_du_sol">Densité_apparente_du_sol:</label>
-                <input class="Densité_apparente_du_sol_input" id="Densité_apparente_du_sol" type="text"
-                    name="Densité_apparente_du_sol">
+                <h2>Données sol</h3>
+                    <label class="Texture_du_sol_label" for="Texture_du_sol">Texture_du_sol:</label><br>
+                    <select class="Texture_du_sol_select" id="Texture_du_sol" name="Texture_du_sol"
+                        onchange="toggleFields(this.value)">
+                        <option value="Argile lourde">Argile lourde</option>
+                        <option value="Argile">Argile</option>
+                        <option value="Argile sableuse">Argile sableuse</option>
+                        <option value="Limon">Limon</option>
+                        <option value="Limon sableux">Limon sableux</option>
+                        <option value="Limon trés sableux">Limon trés sableux</option>
+                        <option value="Sable argilo-limoneux">Sable argilo-limoneux</option>
+                        <option value="Sable">Sable</option>
+                    </select><br>
+                    <div class="Pierrosité_div">
+                        <label class="Pierrosité_label" for="Pierrosité">Pierrosité:</label>
+                        <input class="Pierrosité_input" id="Pierrosité" type="text" value="5" name="Pierrosité">
+                        <span class="Pierrosité_span">%</span>
+                    </div>
+                    <div class="Profondeur_des_racines_div">
+                        <label class="Profondeur_des_racines_label"
+                            for="Profondeur_des_racines">Profondeur_des_racines:</label>
+                        <input class="Profondeur_des_racines_input" id="Profondeur_des_racines" type="text" value="50"
+                            name="Profondeur_des_racines">
+                        <span class="Profondeur_des_racines_span">cm</span>
+                    </div>
+                    <div class="Densité_apparente_des_motes_Bool_div">
+                        <label class="Densité_apparente_des_motes_Bool_label"
+                            for="Densité_apparente_des_motes_Bool">Densité_apparente_des_motes_Bool:</label>
+                        <select class="Densité_apparente_des_motes_Bool_select" id="Densité_apparente_des_motes_Bool"
+                            name="Densité_apparente_des_motes_Bool" onchange="toggleFields(this.value)">
+                            <option value="non">Non</option>
+                            <option value="oui">Oui</option>
+                        </select>
+                    </div>
+                    <label class="Densité_apparente_des_motes_label"
+                        for="Densité_apparente_des_motes">Densité_apparente_des_motes:</label>
+                    <input class="Densité_apparente_des_motes_input" id="Densité_apparente_des_motes" type="text"
+                        step="0.01" name="Densité_apparente_des_motes">
+                    <label class="Densité_apparente_du_sol_lable"
+                        for="Densité_apparente_du_sol">Densité_apparente_du_sol:</label>
+                    <input class="Densité_apparente_du_sol_input" id="Densité_apparente_du_sol" type="text"
+                        name="Densité_apparente_du_sol">
             </div>
             <div class="donne_address">
-                <h3>Address</h3>
-                <label class="Latitude_label" for="Latitude">Latitude:</label>
-                <input calss="Latitude_input" id="Latitude" type="text" name="Latitude">
-
-                <label class="Longitude_label" for="Longitude">Longitude:</label>
-                <input class="Longitude_input" id="Longitude" type="text" name="Longitude">
+                <h2>Address</h3>
+                    <label class="Latitude_label" for="Latitude">Latitude:</label>
+                    <input calss="Latitude_input" id="Latitude" type="text" placeholder="choisissez dans la carte"
+                        name="Latitude">
+                    <label class="Longitude_label" for="Longitude">Longitude:</label>
+                    <input class="Longitude_input" id="Longitude" type="text" placeholder="choisissez dans la carte"
+                        name="Longitude">
             </div>
             <div class="donne_instalation">
-                <h3>Instalation photovolaique</h3>
-                <label class="Hauteur_de_linstallation_label"
-                    for="Hauteur_de_linstallation">Hauteur_de_linstallation:</label>
-                <input class="Hauteur_de_linstallation_input" id="Hauteur_de_linstallation" type="range" min="0"
-                    max="15" value="3" name="Hauteur_de_linstallation">
-                <span class="Hauteur_de_linstallation_span" id="Hauteur_de_linstallation_span">3</span><span>m</span>
-
-                <label class="Taux_de_couverture_label" for="Taux_de_couverture">Taux_de_couverture:</label>
-                <input class="Taux_de_couverture_input" id="Taux_de_couverture" type="range" min="0" max="100"
-                    value="25" name="Taux_de_couverture">
-                <span class="Taux_de_couverture_span" id="Taux_de_couverture_span">25</span><span>%</span>
+                <h2>Instalation photovolaique</h3>
+                    <label class="Hauteur_de_linstallation_label"
+                        for="Hauteur_de_linstallation">Hauteur_de_linstallation:</label>
+                    <input class="Hauteur_de_linstallation_input" id="Hauteur_de_linstallation" type="range" min="0"
+                        max="15" value="3" name="Hauteur_de_linstallation">
+                    <span class="Hauteur_de_linstallation_span"
+                        id="Hauteur_de_linstallation_span">3</span><span>m</span>
+                    <pre></pre>
+                    <label class="Taux_de_couverture_label" for="Taux_de_couverture">Taux_de_couverture:</label>
+                    <input class="Taux_de_couverture_input" id="Taux_de_couverture" type="range" min="0" max="100"
+                        value="25" name="Taux_de_couverture">
+                    <span class="Taux_de_couverture_span" id="Taux_de_couverture_span">25</span><span>%</span>
             </div>
-            <div class="donne_culture">
-                <h3>Culture</h3>
+        </div>
+        <div class="donne_culture">
+            <h2>Culture</h3>
                 <label class="Plant_name_label" for="Plant_name">Plant_name:</label>
                 <select class="Plant_name_select" id="Plant_name" name="Plant_name" onchange="toggleFields(this.value)">
                     <option value="Courgette">Courgette</option>
@@ -148,75 +188,61 @@
                     <option value="Carotte">Carotte</option>
                     <option value="Pomme de terre">Pomme de terre</option>
                 </select>
-
-                <label class="start_date_label" for="start_date">start_date:</label>
-                <input class="start_date_input" id="start_date" type="date" name="start_date">
-
-                <label class="end_date_label" for="end_date">end_date:</label>
-                <input class="end_date_input" id="end_date" type="date" name="end_date">
-
-
-
+                <div class="start_date_div">
+                    <label class="start_date_label" for="start_date">start_date:</label>
+                    <input class="start_date_input" id="start_date" type="date" name="start_date">
+                </div>
+                <div class="end_date_div">
+                    <label class="end_date_label" for="end_date">end_date:</label>
+                    <input class="end_date_input" id="end_date" type="date" name="end_date">
+                </div>
                 <label class="plantation_a_fleuraison_start_label"
                     for="plantation_a_fleuraison_start">plantation_a_fleuraison_start:</label>
                 <input class="plantation_a_fleuraison_start_input" id="plantation_a_fleuraison_start" type="date"
                     name="plantation_a_fleuraison_start">
-
                 <label class="plantation_a_fleuraison_end_label"
                     for="plantation_a_fleuraison_end">plantation_a_fleuraison_end:</label>
                 <input class="plantation_a_fleuraison_end_input" id="plantation_a_fleuraison_end" type="date"
                     name="plantation_a_fleuraison_end">
-
                 <label class="fleuraison_a_mi_recolte_start_label"
                     for="fleuraison_a_mi_recolte_start">fleuraison_a_mi_recolte_start:</label>
                 <input class="fleuraison_a_mi_recolte_start_input" id="fleuraison_a_mi_recolte_start" type="date"
                     name="fleuraison_a_mi_recolte_start">
-
                 <label class="fleuraison_a_mi_recolte_end_label"
                     for="fleuraison_a_mi_recolte_end">fleuraison_a_mi_recolte_end:</label>
                 <input class="fleuraison_a_mi_recolte_end_input" id="fleuraison_a_mi_recolte_end" type="date"
                     name="fleuraison_a_mi_recolte_end">
-
                 <label class="mi_recolte_fin_recolte_start_label"
                     for="mi_recolte_fin_recolte_start">mi_recolte_fin_recolte_start:</label>
                 <input class="mi_recolte_fin_recolte_start_input" id="mi_recolte_fin_recolte_start" type="date"
                     name="mi_recolte_fin_recolte_start">
-
                 <label class="mi_recolte_fin_recolte_end_label"
                     for="mi_recolte_fin_recolte_end">mi_recolte_fin_recolte_end:</label>
                 <input class="mi_recolte_fin_recolte_end_input" id="mi_recolte_fin_recolte_end" type="date"
                     name="mi_recolte_fin_recolte_end">
-
                 <label class="de_0_a_6_semaine_apres_semis_start_lable"
                     for="de_0_a_6_semaine_apres_semis_start">de_0_a_6_semaine_apres_semis_start:</label>
                 <input class="de_0_a_6_semaine_apres_semis_start_input" id="de_0_a_6_semaine_apres_semis_start"
                     type="date" name="de_0_a_6_semaine_apres_semis_start">
-
                 <label class="de_0_a_6_semaine_apres_semis_end_label"
                     for="de_0_a_6_semaine_apres_semis_end">de_0_a_6_semaine_apres_semis_end:</label>
                 <input class="de_0_a_6_semaine_apres_semis_end_input" id="de_0_a_6_semaine_apres_semis_end" type="date"
                     name="de_0_a_6_semaine_apres_semis_end">
-
                 <label class="de_6_semaine_au_stade_start_label"
                     for="de_6_semaine_au_stade_start">de_6_semaine_au_stade_start:</label>
                 <input class="de_6_semaine_au_stade_start_input" id="de_6_semaine_au_stade_start" type="date"
                     name="de_6_semaine_au_stade_start">
-
                 <label class="de_6_semaine_au_stade_end_label"
                     for="de_6_semaine_au_stade_end">de_6_semaine_au_stade_end:</label>
                 <input class="de_6_semaine_au_stade_end_input" id="de_6_semaine_au_stade_end" type="date"
                     name="de_6_semaine_au_stade_end">
-
                 <label class="du_stade_a_recolte_start_label"
                     for="du_stade_a_recolte_start">du_stade_a_recolte_start:</label>
                 <input class="du_stade_a_recolte_start_input" id="du_stade_a_recolte_start" type="date"
                     name="du_stade_a_recolte_start">
-
                 <label class="du_stade_a_recolte_end_label" for="du_stade_a_recolte_end">du_stade_a_recolte_end:</label>
                 <input class="du_stade_a_recolte_end_input" id="du_stade_a_recolte_end" type="date"
                     name="du_stade_a_recolte_end">
-
-
                 <div>
                     <label class="reprise_a_recolte_start_label"
                         for="reprise_a_recolte_start">reprise_a_recolte_start:</label>
@@ -229,9 +255,6 @@
                     <input class="reprise_a_recolte_end_input" id="reprise_a_recolte_end" type="date"
                         name="reprise_a_recolte_end">
                 </div>
-
-
-
                 <div>
                     <label class="Plante_a_50_de_levée_start_label"
                         for="Plante_a_50_de_levée_start">Plante_a_50_de_levée_start</label>
@@ -310,12 +333,11 @@
                     <input class="debut_saison_a_maturite_end_input" id="debut_saison_a_maturite_end" type="date"
                         name="debut_saison_a_maturite_end">
                 </div>
-
-            </div>
-            <input class="submit_button" type="submit" value="Submit">
+                <input class="submit_button" type="submit" value="Calculer">
         </div>
-    </form>
-</div>
+
+    </div>
+</form>
 
 <canvas id="myChart"></canvas>
 
