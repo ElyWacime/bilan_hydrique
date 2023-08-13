@@ -339,7 +339,15 @@
     </div>
 </form>
 
-<canvas id="myChart"></canvas>
+<div id="errorMessage" style="display: none;">
+    <p class="securite_paragraphe">
+        Rencontrez-vous des problèmes pour charger le contenu? Si vous utilisez un navigateur avec des bloqueurs de
+        publicités ou des extensions de sécurité, envisagez de les désactiver temporairement pour ce site.
+
+    </p>
+</div>
+
+<canvas class="chart_canvas" id="myChart" style="display: none;"></canvas>
 
 <script>
 
@@ -667,10 +675,12 @@
             .then(response => response.json())
             .then(data => {
                 console.log("Data sent to server: ", data);
+                document.getElementById('myChart').style.display = 'block';
                 createChart(data);
             })
             .catch((error) => {
                 console.error('Error:', error);
+                document.getElementById('errorMessage').style.display = 'block';
             });
     });
 
