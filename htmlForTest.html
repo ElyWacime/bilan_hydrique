@@ -1,14 +1,11 @@
 <style>
     .input_row {
         flex: 1;
-        margin-left: 150px;
+        position: relative;
+        margin-left: 20px;
     }
 
-    .content_container {
-        background-color: #1d7963;
-    }
-
-    .input_row input {
+    .input_row input:not(.submit_button) {
         border-radius: 15px;
         padding: 5px 10px;
         width: 100px;
@@ -37,12 +34,19 @@
         display: flex;
         justify-content: space-between;
         align-items: start;
+        position: relative;
+        background-color: rgb(60, 148, 230);
     }
 
     .map_container {
         flex: 1;
-        margin-right: 20px;
+        padding-right: 40px;
     }
+
+    .map_element {
+        padding-right: 40px;
+    }
+
 
     .submit_button {
         background-color: #1d7963;
@@ -90,7 +94,9 @@
     }
 
     .donne_culture {
-        margin-right: 200px;
+        margin-top: 20px;
+        position: relative;
+        flex: 1;
     }
 
     .donne_culture h2 {
@@ -100,6 +106,88 @@
     .donne_culture>* {
         margin: 5px;
     }
+
+    .chart_canvas {
+        background-color: white;
+        margin-top: 150px;
+        margin-bottom: 150px;
+        margin-left: 150px;
+        margin-right: 150px;
+    }
+
+    .securite_paragraphe {
+        margin-top: 10px;
+        margin-right: 10px;
+        margin-left: 10px;
+        color: black;
+        font-size: 16px;
+        font-family: Baloo 2;
+    }
+
+    .Texture_du_sol_div,
+    .Pierrosité_div,
+    .Profondeur_des_racines_div,
+    .Densité_apparente_des_motes_Bool_div,
+    .donne_address,
+    .donne_instalation,
+    .donne_culture_icon,
+    .Hauteur_de_linstallation_icon {
+        position: relative;
+    }
+
+    .info-icon {
+        transform: translateY(-50%);
+        cursor: pointer;
+        background-color: #eee;
+        border: 1px solid #ccc;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        text-align: center;
+        line-height: 20px;
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+        font-weight: bold;
+        padding: 2px 4px 2px 4px;
+    }
+
+    .tooltip-content {
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s, visibility 0.3s;
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 8px;
+        background-color: #333;
+        color: #fff;
+        border-radius: 5px;
+        width: 200px;
+        z-index: 100;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        pointer-events: none;
+    }
+
+    .info-icon:hover+.tooltip-content,
+    .tooltip-content:hover {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transition-delay: 0s;
+    }
+
+    .info-icon:hover:hover::after,
+    .tooltip-content:hover::after {
+        content: "";
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        background-color: transparent;
+        top: 100%;
+        left: 100%;
+        transform: translateX(-50%);
+    }
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -107,7 +195,7 @@
     <div class="content_container">
 
         <div class="map_container">
-            <div id="map" style="height: 700px; width: 100%;"></div>
+            <div class="map_element" id="map" style="height: 700px; width: 100%;"></div>
         </div>
 
         <div class="input_row">
@@ -665,7 +753,7 @@
             configuration_data["debut_saison_a_maturite"] = [document.getElementById('debut_saison_a_maturite_start').value, document.getElementById('debut_saison_a_maturite_end').value];
         }
 
-        fetch('http://127.0.0.1:5000/bilan_hydrique', {
+        fetch('http://api.enervivo.fr/bilan_hydrique', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
