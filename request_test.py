@@ -7,8 +7,8 @@ configuration_data = {
     "Densité_apparente_des_motes": 1.68,
     "Densité_apparente_du_sol": 1.68,
     "Profondeur_des_racines": 50,
-    "Pierrosité": 6.3,
-    "Latitude": 60.456,
+    "Pierrosité": 5,
+    "Latitude": 12,
     "Longitude": 40.012,
     "Hauteur_de_linstallation": 2,
     "Taux_de_couverture": 25,
@@ -18,7 +18,7 @@ configuration_data = {
     "reprise_a_recolte": ("2015-05-20", "2015-08-23")
 }
 
-api_endpoint = 'http://82.165.34.79/bilan_hydrique'
+api_endpoint = 'http://127.0.0.1:5000/bilan_hydrique'
 
 response = requests.post(api_endpoint, json=configuration_data)
 

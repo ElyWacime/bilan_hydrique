@@ -137,8 +137,8 @@ def bilan_hydrique():
         "end_date": configuration.end_date,
         "hourly": "temperature_2m,precipitation,direct_radiation,diffuse_radiation",
         "timezone": "auto",
-        "min": "2015-05-20",
-        "max": "2015-08-23"
+        "min": configuration.start_date,
+        "max": configuration.end_date
     }
 
     response = requests.get(url, params=params)
@@ -390,6 +390,9 @@ def bilan_hydrique():
     daily_data.loc[configuration.end_date, "irrigation_pv"] = 2/3 * daily_data.loc[configuration.end_date, "RDU"] if (
         daily_data.loc[configuration.end_date, "eau_utile_pv"] + daily_data.loc[configuration.end_date, "precipitation"] - daily_data.loc[configuration.end_date, "ETR_PV"]) < 2/3 * daily_data.loc[configuration.end_date, "RDU"] else 0
 
+    daily_data['irrigation_cumul'] = daily_data['irrigation'].cumsum()
+    daily_data['irrigation_pv_cumul'] = daily_data['irrigation_pv'].cumsum()
+
     result = daily_data
     result.index = result.index.strftime('%Y-%m-%d')
     result_json = result.to_json(orient="index")
@@ -411,3 +414,6 @@ def test_logging():
 
 if __name__ == "__main__":
     app.run()
+
+# copy rhe whole calculate_KC_values function !!!!
+# create a new branche in github
