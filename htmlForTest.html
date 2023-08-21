@@ -26,6 +26,10 @@
 
     }
 
+    .end_date_input {
+        margin-left: 21px;
+    }
+
     .input_row h2 {
         font-size: 22px;
     }
@@ -35,7 +39,7 @@
         justify-content: space-between;
         align-items: start;
         position: relative;
-        background-color: rgb(60, 148, 230);
+        background-color: #00b685;
     }
 
     .map_container {
@@ -57,7 +61,11 @@
 
     .submit_button:hover {
         background-color: #FFFFFF;
-        color: black;
+        color: #1d7963;
+    }
+
+    .Texture_du_sol_div {
+        position: relative;
     }
 
     .Pierrosité_input {
@@ -70,7 +78,7 @@
     }
 
     .Profondeur_des_racines_input {
-        margin-left: 15px;
+        margin-left: 43px;
     }
 
     .donne_culture input {
@@ -99,11 +107,13 @@
         padding: 5px;
         border-radius: 10px;
         font-size: 18px;
+        font-weight: 500;
 
     }
 
     .donne_culture button:hover {
-        background-color: aquamarine;
+        background-color: white;
+        color: #1d7963;
         cursor: pointer;
     }
 
@@ -122,14 +132,45 @@
     }
 
     .chart_canvas_div {
-        margin-left: 370px;
-        height: 650px;
-        width: 1100px;
+        display: flex;
+        align-items: start;
+        /* this ensures items are top-aligned */
+        justify-content: flex-start;
+        /* this ensures items start on the left */
+        flex-wrap: nowrap;
+        /* this ensures the items won't wrap */
+    }
+
+    .canvas_wrapper {
+        flex: 1;
+        width: 60%;
+        /* adjust as required */
+        max-width: 60%;
+        /* adjust as required */
+    }
+
+    .chart_description {
+        flex: 1;
+        width: 40%;
+        /* adjust as required */
+        max-width: 40%;
+        /* adjust as required */
+    }
+
+    .chart_canvas {
+        width: 100%;
+        display: block;
+        max-width: 100%;
     }
 
     .chart_canvas_irrigation_div {
-        margin-top: -5px;
-        margin-left: 370px;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        /* Center horizontally */
+        align-items: center;
+        /* Center vertically */
+        height: 100vh;
         height: 650px;
         width: 1100px;
     }
@@ -143,7 +184,6 @@
         font-family: Baloo 2;
     }
 
-    .Texture_du_sol_div,
     .Pierrosité_div,
     .Profondeur_des_racines_div,
     .Densité_apparente_des_motes_Bool_div,
@@ -210,10 +250,10 @@
 
     @media (max-width: 768px) {
 
-        .wpb_content_element .input_row input:not(.submit_button),
-        .wpb_content_element .input_row select,
-        .wpb_content_element .donne_culture input,
-        .wpb_content_element .donne_culture select {
+        .input_row input:not(.submit_button),
+        .input_row select,
+        .donne_culture input,
+        .donne_culture select {
             width: 100%;
             box-sizing: border-box;
         }
@@ -229,18 +269,18 @@
             flex-direction: column;
         }
 
-        .wpb_content_element .end_date_input,
-        .wpb_content_element .Plant_name_select,
-        .wpb_content_element .Pierrosité_input {
+        .end_date_input,
+        .Plant_name_select,
+        .Pierrosité_input {
             margin-left: 0;
         }
 
-        .wpb_content_element .map_container,
-        .wpb_content_element .map_element {
+        .map_container,
+        .map_element {
             padding-right: 0;
         }
 
-        .wpb_content_element .submit_button {
+        .submit_button {
             margin-left: 0;
             width: 100%;
         }
@@ -348,18 +388,18 @@
                     <label class="Densité_apparente_des_motes_label" for="Densité_apparente_des_motes">Densité apparente
                         des motes:</label>
                     <input class="Densité_apparente_des_motes_input" id="Densité_apparente_des_motes" type="text"
-                        step="0.01" name="Densité_apparente_des_motes">
+                        step="0.01" name="Densité_apparente_des_motes" value="1.68">
                     <label class="Densité_apparente_du_sol_lable" for="Densité_apparente_du_sol">Densité apparente du
                         sol:</label>
                     <input class="Densité_apparente_du_sol_input" id="Densité_apparente_du_sol" type="text"
-                        name="Densité_apparente_du_sol">
+                        name="Densité_apparente_du_sol" value="1.68">
             </div>
             <div class="donne_address">
                 <h2>Address</h3>
                     <label class="Latitude_label" for="Latitude">Latitude:</label>
-                    <input calss="Latitude_input" id="Latitude" type="text" placeholder="choisissez" name="Latitude">
+                    <input calss="Latitude_input" id="Latitude" type="text" value="44.689" name="Latitude">
                     <label class="Longitude_label" for="Longitude">Longitude:</label>
-                    <input class="Longitude_input" id="Longitude" type="text" placeholder="choisissez" name="Longitude">
+                    <input class="Longitude_input" id="Longitude" type="text" name="Longitude" value="-1.017">
                     <span class="info-icon">i</span>
                     <div class="tooltip-content">
                         Choisissez votre position dans la carte
@@ -410,11 +450,11 @@
                 </div>
                 <div class="start_date_div">
                     <label class="start_date_label" for="start_date">Date de depart:</label>
-                    <input class="start_date_input" id="start_date" type="date" name="start_date">
+                    <input class="start_date_input" id="start_date" type="date" name="start_date" value="2015-06-19">
                 </div>
                 <div class="end_date_div">
                     <label class="end_date_label" for="end_date">Date de fin:</label>
-                    <input class="end_date_input" id="end_date" type="date" name="end_date">
+                    <input class="end_date_input" id="end_date" type="date" name="end_date" value="2015-08-19">
                 </div>
                 <label class="plantation_a_fleuraison_start_label" for="plantation_a_fleuraison_start">De
                     plantation:</label>
@@ -460,12 +500,12 @@
                 <div>
                     <label class="reprise_a_recolte_start_label" for="reprise_a_recolte_start">Reprise:</label>
                     <input class="reprise_a_recolte_start_input" id="reprise_a_recolte_start" type="date"
-                        name="reprise_a_recolte_start">
+                        name="reprise_a_recolte_start" value="2015-06-19">
                 </div>
                 <div>
                     <label class="reprise_a_recolte_end_label" for="reprise_a_recolte_end">à recolte:</label>
                     <input class="reprise_a_recolte_end_input" id="reprise_a_recolte_end" type="date"
-                        name="reprise_a_recolte_end">
+                        name="reprise_a_recolte_end" value="2015-08-19">
                 </div>
                 <div>
                     <label class="Plante_a_50_de_levée_start_label" for="Plante_a_50_de_levée_start">Du plante:</label>
@@ -558,11 +598,27 @@
     </p>
 </div>
 
-<div class="chart_canvas_div" id="chart_canvas_div" style="display: none;"><canvas class="chart_canvas" id="myChart"
-        style="display: none;"></canvas></div>
+<div class="chart_canvas_div" id="chart_canvas_div" style="display: none;">
+    <div class="canvas_wrapper">
+        <canvas class="chart_canvas" id="myChart" style="display: none;"></canvas>
+    </div>
+    <div class="chart_description">
+        <pre>
+            Some explications for the chart !
+            <span style="font-family: Baloo 2; font-size: 18px; font-weight: 450;">Eau utile</span>: explain it's progration and give some examples.
+            <span style="font-family: Baloo 2; font-size: 18px; font-weight: 450;">RDU</span>: explain it's progration and give some examples.
+            <span style="font-family: Baloo 2; font-size: 18px; font-weight: 450;">Eau utile PV</span>: explain it's progration and give some examples.
+            <span style="font-family: Baloo 2; font-size: 18px; font-weight: 450;">Capacité au champ</span>: explain it's progration and give some examples.
+            <span style="font-family: Baloo 2; font-size: 18px; font-weight: 450;">Irrigation</span>: explain it's progration and give some examples.
+            <span style="font-family: Baloo 2; font-size: 18px; font-weight: 450;">Irrigation PV</span>: explain it's progration and give some examples.
+    
+        </pre>
+    </div>
+</div>
 <div class="chart_canvas_irrigation_div" id="chart_canvas_irrigation_div" style="display: none;"><canvas
         class="chart_canvas_irrigation" id="myChartOfIrrigationCumul" height="200" width="400"
-        style="display: none;"></canvas></div>
+        style="display: none;"></canvas>
+</div>
 
 <script>
 
@@ -880,7 +936,7 @@
             configuration_data["debut_saison_a_maturite"] = [document.getElementById('debut_saison_a_maturite_start').value, document.getElementById('debut_saison_a_maturite_end').value];
         }
 
-        fetch('http://127.0.0.1:5000/bilan_hydrique', {
+        fetch('https://api.enervivo.fr/bilan_hydrique', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -918,14 +974,14 @@
             data: {
                 labels: dates,
                 datasets: [{
-                    label: 'irrigation_cumuler',
+                    label: 'irrigation_pv_cumuler',
                     data: irrigation_cumul_prog,
                     fill: false,
                     borderColor: 'rgb(75, 192, 192)',
                     tension: 0.1
                 },
                 {
-                    label: 'irrigation_pv_cumuler',
+                    label: 'irrigation_cumuler',
                     data: irrigation_pv_cumul_prog,
                     fill: false,
                     borderColor: 'rgb(110, 70, 110)',
@@ -1026,7 +1082,7 @@
     var marker;
 
     function initMap() {
-        var initialLocation = { lat: -25.363, lng: 131.044 };
+        var initialLocation = { lat: 44.689, lng: -1.017 };
 
         map = new google.maps.Map(document.getElementById('map'), {
             zoom: 4,
