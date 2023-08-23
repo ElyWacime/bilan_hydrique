@@ -204,18 +204,6 @@
         transform: translateX(-50%);
     }
 
-    .chart_canvas {
-        height: 400px;
-    }
-
-    .chart_canvas_irrigation {
-        height: 400px;
-    }
-
-    .chart_div {
-        margin-top: 10px;
-    }
-
     @media (max-width: 866px) {
 
         .input_row input:not(.submit_button),
@@ -256,17 +244,12 @@
 
         .tooltip-content {
             width: calc(100% - 16px);
-            /* 8px padding on either side */
         }
 
-        .chart_canvas {
+        .chart_div,
+        .chart_irrigation_div {
             width: 100%;
-            height: auto;
-        }
-
-        .chart_canvas_irrigation {
-            width: 100%;
-            height: auto;
+            overflow-x: auto;
         }
     }
 
@@ -313,36 +296,25 @@
 
         .tooltip-content {
             width: calc(100% - 16px);
-            /* 8px padding on either side */
         }
 
         .chart_description {
-            text-align: center;
-            /* optional: center the description text for mobile */
+            text-align: left;
             width: 100%;
-            /* take full width on mobile */
         }
 
-        .chart_description pre {
-            white-space: pre-wrap;
-            font-family: "Courier New", Courier, monospace;
-            margin: 0;
-        }
+
 
         .chart_description span {
             font-family: "Baloo 2";
-            font-size: 18px;
-            font-weight: 450;
+            font-size: 14px;
+            font-weight: 300;
         }
 
-        .chart_canvas {
+        .chart_div,
+        .chart_irrigation_div {
             width: 100%;
-            height: auto;
-        }
-
-        .chart_canvas_irrigation {
-            width: 100%;
-            height: auto;
+            overflow-x: auto;
         }
     }
 </style>
@@ -647,17 +619,10 @@
     </div>
 </div>
 <div class="chart_description" id="chart_description" style="display: none;">
-    <pre>
-        Some explications for the chart !
-        <span style="font-family: Baloo 2; font-size: 18px; font-weight: 450;">Eau utile</span>: explain it's progration and give some examples.
-        <span style="font-family: Baloo 2; font-size: 18px; font-weight: 450;">RDU</span>: explain it's progration and give some examples.
-        <span style="font-family: Baloo 2; font-size: 18px; font-weight: 450;">Eau utile PV</span>: explain it's progration and give some examples.
-        <span style="font-family: Baloo 2; font-size: 18px; font-weight: 450;">Capacité au champ</span>: explain it's progration and give some examples.
-        <span style="font-family: Baloo 2; font-size: 18px; font-weight: 450;">Irrigation</span>: explain it's progration and give some examples.
-        <span style="font-family: Baloo 2; font-size: 18px; font-weight: 450;">Irrigation PV</span>: explain it's progration and give some examples.
-        <span style="font-family: Baloo 2; font-size: 18px; font-weight: 450;">Irrigation PV cumuler</span>: explain it's progration and give some examples.
-        <span style="font-family: Baloo 2; font-size: 18px; font-weight: 450;">Irrigation cumuler</span>: explain it's progration and give some examples.
-    </pre>
+    <pre><span style="font-weight: 400; font-size: 16px;">some explication for the chart:</span>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis ipsa dolores nam eius necessitatibus, expedita
+        pariatur consequuntur. Doloribus possimus deleniti fugit, nemo a illo accusamus repellendus corporis blanditiis,
+        non deserunt!</pre>
 </div>
 
 <script>
@@ -999,10 +964,39 @@
             });
     });
 
+    function getDeviceType() {
+        let width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+
+        if (width <= 480) {
+            return 'phone';
+        } else if (width <= 1024) {
+            return 'tablet';
+        } else {
+            return 'computer';
+        }
+    }
+
+    function setCanvasDimensions(canvas) {
+        let deviceType = getDeviceType();
+
+        if (deviceType === 'phone') {
+            canvas.width = 600;
+            canvas.height = 350;
+        } else if (deviceType === 'tablet') {
+            canvas.width = 800;
+            canvas.height = 400;
+        } else {
+            canvas.width = 750;
+            canvas.height = 450;
+        }
+    }
+
+    canvas_irrigation = document.getElementById('myChartOfIrrigationCumul');
+    setCanvasDimensions(canvas_irrigation);
     let myChartOfIrrigationCumul;
 
     function createChartOfIrrigationCumul(data) {
-        const ctx = document.getElementById('myChartOfIrrigationCumul').getContext('2d');
+        const ctx = canvas_irrigation.getContext('2d');
 
         if (myChartOfIrrigationCumul) {
             myChartOfIrrigationCumul.destroy();
@@ -1028,14 +1022,21 @@
                     borderColor: 'rgb(110, 70, 110)',
                     tension: 0.1
                 }]
+            },
+            options: {
+                responsive: false,
             }
+
         })
     }
+
+    canvas = document.getElementById('myChart');
+    setCanvasDimensions(canvas);
 
     let myChart;
 
     function createChart(data) {
-        const ctx = document.getElementById('myChart').getContext('2d');
+        const ctx = canvas.getContext('2d');
 
         if (myChart) {
             myChart.destroy();
@@ -1098,23 +1099,7 @@
                 }]
             },
             options: {
-                responsive: true,
-                scales: {
-                    x: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: 'Date'
-                        }
-                    },
-                    y: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: 'eau utile / eau utile pv / RDU'
-                        }
-                    }
-                }
+                responsive: false,
             }
         });
     }
