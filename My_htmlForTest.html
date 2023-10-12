@@ -42,28 +42,43 @@ select, input[type="range"]{
 select,
 input[type="text"],
 input[type="date"] {
-  width: 100%;
-  padding: 10px;
+  width: 70%;
+  padding: 5px;
   border: 1px solid #ccc;
-  border-radius: 5px;
-  margin-bottom: 10px;
+  border-radius: 50px;
+  margin-bottom: 0px;
+  flex: 1;
 }
 .info-icon {
-  color: #d1dfee;
+  width: 20px;
+  height: 20px;
+  border: 1px solid;
+  border-radius: 80%;
+  color: black;
   font-size: 20px;
   margin-left: 5px;
   cursor: pointer;
+  align-self: flex-start;
+  background-color: wheat;
 }
 .tooltip-content {
   display: none;
-  background-color: #007bff;
+  background-color: #bacadb;
   color: #fff;
   border-radius: 5px;
   padding: 5px 10px;
   position: absolute;
   z-index: 1;
 }
-.info-icon:hover + .tooltip-content {
+.Texture_du_sol_div, .Pierrosité_div,
+.Profondeur_des_racines_div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+.info-icon:hover + .tooltip-content,
+.tooltip-content:hover {
   display: block;
 }
 .submit_button {
@@ -75,6 +90,10 @@ input[type="date"] {
   cursor: pointer;
   font-size: 16px;
   margin-top: 10px;
+}
+.Texture_du_sol_div {
+    display: inline;
+    
 }
 </style>
 <form id="apiForm">
@@ -88,7 +107,7 @@ input[type="date"] {
             <div class="donne_sol">
                 <h2>Données sol</h3>
                     <div class="Texture_du_sol_div">
-                        <label class="Texture_du_sol_label" for="Texture_du_sol">Texture du sol:</label><br>
+                        <label class="Texture_du_sol_label" for="Texture_du_sol">Texture du sol:</label>
                         <select class="Texture_du_sol_select" id="Texture_du_sol" name="Texture_du_sol"
                             onchange="toggleFields(this.value)">
                             <option value="Argile lourde">Argile lourde</option>
@@ -100,7 +119,7 @@ input[type="date"] {
                             <option value="Sable argilo-limoneux">Sable argilo-limoneux</option>
                             <option value="Sable">Sable</option>
                         </select>
-                        <span class="info-icon">i</span>
+                        <span class="info-icon"></span>
                         <div class="tooltip-content">
                             La texture du sol est la répartition des catégories
                             de tailles de particules. Elle est récupérable dans
@@ -108,10 +127,9 @@ input[type="date"] {
                         </div>
                     </div>
                     <div class="Pierrosité_div">
-                        <label class="Pierrosité_label" for="Pierrosité">Pierrosité:</label>
+                        <label class="Pierrosité_label" for="Pierrosité">Pierrosité (%):</label>
                         <input class="Pierrosité_input" id="Pierrosité" type="text" value="5" name="Pierrosité">
-                        <span class="Pierrosité_span">%</span>
-                        <span class="info-icon">i</span>
+                        <span class="info-icon"></span>
                         <div class="tooltip-content">
                             La pierrosité est la proportion
                             de pierre dans le sol (>2mm)
@@ -125,11 +143,10 @@ input[type="date"] {
                     </div>
                     <div class="Profondeur_des_racines_div">
                         <label class="Profondeur_des_racines_label" for="Profondeur_des_racines">Profondeur des
-                            racines:</label>
+                            racines (cm):</label>
                         <input class="Profondeur_des_racines_input" id="Profondeur_des_racines" type="text" value="50"
                             name="Profondeur_des_racines">
-                        <span class="Profondeur_des_racines_span">cm</span>
-                        <span class="info-icon">i</span>
+                        <span class="info-icon"></span>
                         <div class="tooltip-content">
                             La profondeur à laquelle les plantes peuvent
                             développer ses racines.
@@ -146,7 +163,7 @@ input[type="date"] {
                             <option value="non">Non</option>
                             <option value="oui">Oui</option>
                         </select>
-                        <span class="info-icon">i</span>
+                        <span class="info-icon"></span>
                         <div class="tooltip-content">
                             La densité apparente est le poids sec pour
                             un volume donné (une motte ou le sol complet).
@@ -168,7 +185,7 @@ input[type="date"] {
                     <input calss="Latitude_input" id="Latitude" type="text" value="44.689" name="Latitude">
                     <label class="Longitude_label" for="Longitude">Longitude:</label>
                     <input class="Longitude_input" id="Longitude" type="text" name="Longitude" value="-1.017">
-                    <span class="info-icon">i</span>
+                    <span class="info-icon"></span>
                     <div class="tooltip-content">
                         Choisissez votre position dans la carte
                     </div>
