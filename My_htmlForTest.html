@@ -1,0 +1,386 @@
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  margin: 20px;
+}
+.content_container {
+  background-color: #09d480;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+.map_container {
+  height: 600px;
+  width: 100%;
+  margin-bottom: 20px;
+}
+.input_row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+}
+select, input[type="range"]{
+    width: 90%;
+}
+select,
+input[type="text"],
+input[type="date"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+.info-icon {
+  color: #d1dfee;
+  font-size: 20px;
+  margin-left: 5px;
+  cursor: pointer;
+}
+.tooltip-content {
+  display: none;
+  background-color: #007bff;
+  color: #fff;
+  border-radius: 5px;
+  padding: 5px 10px;
+  position: absolute;
+  z-index: 1;
+}
+.info-icon:hover + .tooltip-content {
+  display: block;
+}
+.submit_button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px;
+}
+</style>
+<form id="apiForm">
+    <div class="content_container">
+
+        <div class="map_container">
+            <div class="map_element" id="map" style="height: 600px; width: 100%;"></div>
+        </div>
+
+        <div class="input_row">
+            <div class="donne_sol">
+                <h2>Données sol</h3>
+                    <div class="Texture_du_sol_div">
+                        <label class="Texture_du_sol_label" for="Texture_du_sol">Texture du sol:</label><br>
+                        <select class="Texture_du_sol_select" id="Texture_du_sol" name="Texture_du_sol"
+                            onchange="toggleFields(this.value)">
+                            <option value="Argile lourde">Argile lourde</option>
+                            <option value="Argile">Argile</option>
+                            <option value="Argile sableuse">Argile sableuse</option>
+                            <option value="Limon">Limon</option>
+                            <option value="Limon sableux">Limon sableux</option>
+                            <option value="Limon trés sableux">Limon trés sableux</option>
+                            <option value="Sable argilo-limoneux">Sable argilo-limoneux</option>
+                            <option value="Sable">Sable</option>
+                        </select>
+                        <span class="info-icon">i</span>
+                        <div class="tooltip-content">
+                            La texture du sol est la répartition des catégories
+                            de tailles de particules. Elle est récupérable dans
+                            les analyses de sol ou par la méthode du boudin
+                        </div>
+                    </div>
+                    <div class="Pierrosité_div">
+                        <label class="Pierrosité_label" for="Pierrosité">Pierrosité:</label>
+                        <input class="Pierrosité_input" id="Pierrosité" type="text" value="5" name="Pierrosité">
+                        <span class="Pierrosité_span">%</span>
+                        <span class="info-icon">i</span>
+                        <div class="tooltip-content">
+                            La pierrosité est la proportion
+                            de pierre dans le sol (>2mm)
+                            Observation des pierres de surfaces :
+                            Aucune : 0 %
+                            Quelques pierres : 5 %
+                            Éparpillés mais visible : 10%
+                            Partout à la surface du champ : 30 %
+                            Plus de sol visible : 70 %
+                        </div>
+                    </div>
+                    <div class="Profondeur_des_racines_div">
+                        <label class="Profondeur_des_racines_label" for="Profondeur_des_racines">Profondeur des
+                            racines:</label>
+                        <input class="Profondeur_des_racines_input" id="Profondeur_des_racines" type="text" value="50"
+                            name="Profondeur_des_racines">
+                        <span class="Profondeur_des_racines_span">cm</span>
+                        <span class="info-icon">i</span>
+                        <div class="tooltip-content">
+                            La profondeur à laquelle les plantes peuvent
+                            développer ses racines.
+                            Elle peut être déterminé par la
+                            plante ou par la profondeur totale du sol.
+
+                        </div>
+                    </div>
+                    <div class="Densité_apparente_des_motes_Bool_div">
+                        <label class="Densité_apparente_des_motes_Bool_label"
+                            for="Densité_apparente_des_motes_Bool">Utiliser densité apparente?</label>
+                        <select class="Densité_apparente_des_motes_Bool_select" id="Densité_apparente_des_motes_Bool"
+                            name="Densité_apparente_des_motes_Bool" onchange="toggleFields(this.value)">
+                            <option value="non">Non</option>
+                            <option value="oui">Oui</option>
+                        </select>
+                        <span class="info-icon">i</span>
+                        <div class="tooltip-content">
+                            La densité apparente est le poids sec pour
+                            un volume donné (une motte ou le sol complet).
+                            Si vous ne la connaissez pas, laissez le champs vide
+                        </div>
+                    </div>
+                    <label class="Densité_apparente_des_motes_label" for="Densité_apparente_des_motes">Densité apparente
+                        des motes:</label>
+                    <input class="Densité_apparente_des_motes_input" id="Densité_apparente_des_motes" type="text"
+                        step="0.01" name="Densité_apparente_des_motes" value="1.68">
+                    <label class="Densité_apparente_du_sol_lable" for="Densité_apparente_du_sol">Densité apparente du
+                        sol:</label>
+                    <input class="Densité_apparente_du_sol_input" id="Densité_apparente_du_sol" type="text"
+                        name="Densité_apparente_du_sol" value="1.68">
+            </div>
+            <div class="donne_address">
+                <h2>Address</h3>
+                    <label class="Latitude_label" for="Latitude">Latitude:</label>
+                    <input calss="Latitude_input" id="Latitude" type="text" value="44.689" name="Latitude">
+                    <label class="Longitude_label" for="Longitude">Longitude:</label>
+                    <input class="Longitude_input" id="Longitude" type="text" name="Longitude" value="-1.017">
+                    <span class="info-icon">i</span>
+                    <div class="tooltip-content">
+                        Choisissez votre position dans la carte
+                    </div>
+            </div>
+            <div class="donne_instalation">
+                <h2>Instalation photovolaique</h3>
+                    <div class="Hauteur_de_linstallation_icon">
+                        <label class="Hauteur_de_linstallation_label" for="Hauteur_de_linstallation">Hauteur de
+                            linstallation:</label>
+                        <input class="Hauteur_de_linstallation_input" id="Hauteur_de_linstallation" type="range" min="0"
+                            max="15" value="3" name="Hauteur_de_linstallation">
+                        <span class="Hauteur_de_linstallation_span"
+                            id="Hauteur_de_linstallation_span">3</span><span>m</span>
+                        <span class="info-icon">i</span>
+                        <div class="tooltip-content">
+                            La hauteur du point le plus bas des panneaux photovoltaïques
+                        </div><br>
+                    </div>
+                    <label class="Taux_de_couverture_label" for="Taux_de_couverture">Taux de couverture:</label>
+                    <input class="Taux_de_couverture_input" id="Taux_de_couverture" type="range" min="0" max="100"
+                        value="25" name="Taux_de_couverture">
+                    <span class="Taux_de_couverture_span" id="Taux_de_couverture_span">25</span><span>%</span>
+                    <span class="info-icon">i</span>
+                    <div class="tooltip-content">La densité apparente est le poids sec pour
+                        un volume donné (une motte ou le sol complet).
+                        Si vous ne la connaissez pas, laissez le champs vide
+                    </div>
+            </div>
+        </div>
+        <div class="donne_culture">
+            <h2>Culture</h3>
+                <div class="donne_culture_icon">
+                    <label class="Plant_name_label" for="Plant_name">Plante:</label>
+                    <select class="Plant_name_select" id="Plant_name" name="Plant_name"
+                        onchange="toggleFields(this.value)">
+                        <option value="Courgette">Courgette</option>
+                        <option value="Poireau">Poireau</option>
+                        <option value="Carotte">Carotte</option>
+                        <option value="Pomme de terre">Pomme de terre</option>
+                    </select>
+
+                    <span class="info-icon">i</span>
+                    <div class="tooltip-content">
+                        Choisissez la culture que vous voulez cultiver et renseigner
+                        les dates à laquelle les plantes atteindront le stade ci-dessous
+                    </div>
+                </div>
+                <div class="start_date_div">
+                    <label class="start_date_label" for="start_date">Date de depart:</label>
+                    <input class="start_date_input" id="start_date" type="date" name="start_date" value="2015-06-19">
+                </div>
+                <div class="end_date_div">
+                    <label class="end_date_label" for="end_date">Date de fin:</label>
+                    <input class="end_date_input" id="end_date" type="date" name="end_date" value="2015-08-19">
+                </div>
+                <label class="plantation_a_fleuraison_start_label" for="plantation_a_fleuraison_start">De
+                    plantation:</label>
+                <input class="plantation_a_fleuraison_start_input" id="plantation_a_fleuraison_start" type="date"
+                    name="plantation_a_fleuraison_start">
+                <label class="plantation_a_fleuraison_end_label" for="plantation_a_fleuraison_end">à fleuraison:</label>
+                <input class="plantation_a_fleuraison_end_input" id="plantation_a_fleuraison_end" type="date"
+                    name="plantation_a_fleuraison_end">
+                <label class="fleuraison_a_mi_recolte_start_label" for="fleuraison_a_mi_recolte_start">De
+                    fleuraison:</label>
+                <input class="fleuraison_a_mi_recolte_start_input" id="fleuraison_a_mi_recolte_start" type="date"
+                    name="fleuraison_a_mi_recolte_start">
+                <label class="fleuraison_a_mi_recolte_end_label" for="fleuraison_a_mi_recolte_end">à mi recolte:</label>
+                <input class="fleuraison_a_mi_recolte_end_input" id="fleuraison_a_mi_recolte_end" type="date"
+                    name="fleuraison_a_mi_recolte_end">
+                <label class="mi_recolte_fin_recolte_start_label" for="mi_recolte_fin_recolte_start">De mi
+                    recolte:</label>
+                <input class="mi_recolte_fin_recolte_start_input" id="mi_recolte_fin_recolte_start" type="date"
+                    name="mi_recolte_fin_recolte_start">
+                <label class="mi_recolte_fin_recolte_end_label" for="mi_recolte_fin_recolte_end">fin recolte:</label>
+                <input class="mi_recolte_fin_recolte_end_input" id="mi_recolte_fin_recolte_end" type="date"
+                    name="mi_recolte_fin_recolte_end">
+                <label class="de_0_a_6_semaine_apres_semis_start_lable" for="de_0_a_6_semaine_apres_semis_start">De 0
+                    semaine aprés semis:</label>
+                <input class="de_0_a_6_semaine_apres_semis_start_input" id="de_0_a_6_semaine_apres_semis_start"
+                    type="date" name="de_0_a_6_semaine_apres_semis_start">
+                <label class="de_0_a_6_semaine_apres_semis_end_label" for="de_0_a_6_semaine_apres_semis_end">à 6 semaine
+                    apres semis:</label>
+                <input class="de_0_a_6_semaine_apres_semis_end_input" id="de_0_a_6_semaine_apres_semis_end" type="date"
+                    name="de_0_a_6_semaine_apres_semis_end">
+                <label class="de_6_semaine_au_stade_start_label" for="de_6_semaine_au_stade_start">De 6 semaine:</label>
+                <input class="de_6_semaine_au_stade_start_input" id="de_6_semaine_au_stade_start" type="date"
+                    name="de_6_semaine_au_stade_start">
+                <label class="de_6_semaine_au_stade_end_label" for="de_6_semaine_au_stade_end">au stade:</label>
+                <input class="de_6_semaine_au_stade_end_input" id="de_6_semaine_au_stade_end" type="date"
+                    name="de_6_semaine_au_stade_end">
+                <label class="du_stade_a_recolte_start_label" for="du_stade_a_recolte_start">Du stade:</label>
+                <input class="du_stade_a_recolte_start_input" id="du_stade_a_recolte_start" type="date"
+                    name="du_stade_a_recolte_start">
+                <label class="du_stade_a_recolte_end_label" for="du_stade_a_recolte_end">à la récolte:</label>
+                <input class="du_stade_a_recolte_end_input" id="du_stade_a_recolte_end" type="date"
+                    name="du_stade_a_recolte_end">
+                <div>
+                    <label class="reprise_a_recolte_start_label" for="reprise_a_recolte_start">Reprise:</label>
+                    <input class="reprise_a_recolte_start_input" id="reprise_a_recolte_start" type="date"
+                        name="reprise_a_recolte_start" value="2015-06-19">
+                </div>
+                <div>
+                    <label class="reprise_a_recolte_end_label" for="reprise_a_recolte_end">à recolte:</label>
+                    <input class="reprise_a_recolte_end_input" id="reprise_a_recolte_end" type="date"
+                        name="reprise_a_recolte_end" value="2015-08-19">
+                </div>
+                <div>
+                    <label class="Plante_a_50_de_levée_start_label" for="Plante_a_50_de_levée_start">Du plante:</label>
+                    <input class="Plante_a_50_de_levée_start_input" id="Plante_a_50_de_levée_start" type="date"
+                        name="Plante_a_50_de_levée_start">
+                </div>
+                <div>
+                    <label class="Plante_a_50_de_levée_end_label" for="Plante_a_50_de_levée_end">à 50 de levée:</label>
+                    <input class="Plante_a_50_de_levée_end_input" id="Plante_a_50_de_levée_end" type="date"
+                        name="Plante_a_50_de_levée_end">
+                </div>
+                <div>
+                    <label class="de_50_de_levée_a_50_recouvrement_start_label"
+                        for="de_50_de_levée_a_50_recouvrement_start">De 50 de levée:</label>
+                    <input class="de_50_de_levée_a_50_recouvrement_start_input"
+                        id="de_50_de_levée_a_50_recouvrement_start" type="date"
+                        name="de_50_de_levée_a_50_recouvrement_start">
+                </div>
+                <div>
+                    <label class="de_50_de_levée_a_50_recouvrement_end_label"
+                        for="de_50_de_levée_a_50_recouvrement_end">à 50 recouvrement:</label>
+                    <input class="de_50_de_levée_a_50_recouvrement_end_input" id="de_50_de_levée_a_50_recouvrement_end"
+                        type="date" name="de_50_de_levée_a_50_recouvrement_end">
+                </div>
+                <div>
+                    <label class="de_50_recouvrement_a_recouvrement_total_start_label"
+                        for="de_50_recouvrement_a_recouvrement_total_start">De 50 recouvrement:</label>
+                    <input class="de_50_recouvrement_a_recouvrement_total_start_input"
+                        id="de_50_recouvrement_a_recouvrement_total_start" type="date"
+                        name="de_50_recouvrement_a_recouvrement_total_start">
+                </div>
+                <div>
+                    <label class="de_50_recouvrement_a_recouvrement_total_end_label"
+                        for="de_50_recouvrement_a_recouvrement_total_end">à recouvrement total:</label>
+                    <input class="de_50_recouvrement_a_recouvrement_total_end_input"
+                        id="de_50_recouvrement_a_recouvrement_total_end" type="date"
+                        name="de_50_recouvrement_a_recouvrement_total_end">
+                </div>
+                <div>
+                    <label class="recvroument_total_plus_30_jours_start_label"
+                        for="recvroument_total_plus_30_jours_start">Du recvroument total:</label>
+                    <input class="recvroument_total_plus_30_jours_start_input"
+                        id="recvroument_total_plus_30_jours_start" type="date"
+                        name="recvroument_total_plus_30_jours_start">
+                </div>
+                <div>
+                    <label class="recvroument_total_plus_30_jours_end_label"
+                        for="recvroument_total_plus_30_jours_end">au recvroument total plus 30 jours:</label>
+                    <input class="recvroument_total_plus_30_jours_end_input" id="recvroument_total_plus_30_jours_end"
+                        type="date" name="recvroument_total_plus_30_jours_end">
+                </div>
+                <div>
+                    <label class="recvroument_total_plus_30_jours_a_debut_saison_start_label"
+                        for="recvroument_total_plus_30_jours_a_debut_saison_start">De recvroument total plus 30
+                        jours:</label>
+                    <input class="recvroument_total_plus_30_jours_a_debut_saison_start_input"
+                        id="recvroument_total_plus_30_jours_a_debut_saison_start" type="date"
+                        name="recvroument_total_plus_30_jours_a_debut_saison_start">
+                </div>
+                <div>
+                    <label class="recvroument_total_plus_30_jours_a_debut_saison_end_label"
+                        for="recvroument_total_plus_30_jours_a_debut_saison_end">à début saison:</label>
+                    <input class="recvroument_total_plus_30_jours_a_debut_saison_end_input"
+                        id="recvroument_total_plus_30_jours_a_debut_saison_end" type="date"
+                        name="recvroument_total_plus_30_jours_a_debut_saison_end">
+                </div>
+                <div>
+                    <label class="debut_saison_a_maturite_start_label" for="debut_saison_a_maturite_start">Du début
+                        saison:</label>
+                    <input class="debut_saison_a_maturite_start_input" id="debut_saison_a_maturite_start" type="date"
+                        name="debut_saison_a_maturite_start">
+                </div>
+                <div>
+                    <label class="debut_saison_a_maturite_end_label" for="debut_saison_a_maturite_end">à
+                        maturite:</label>
+                    <input class="debut_saison_a_maturite_end_input" id="debut_saison_a_maturite_end" type="date"
+                        name="debut_saison_a_maturite_end">
+                </div>
+                <button class="submit_button" type="submit">Lancer la simulation</button>
+        </div>
+
+    </div>
+</form>
+
+<div id="errorMessage" style="display: none;">
+    <p class="securite_paragraphe">
+        Rencontrez-vous des problèmes pour charger le contenu? Si vous utilisez un navigateur avec des bloqueurs de
+        publicités ou des extensions de sécurité, envisagez de les désactiver temporairement pour ce site.
+
+    </p>
+</div>
+
+<div class="both_charts_container">
+    <div class="chart_div" id="chart_canvas_div" style="display: none;">
+        <canvas class="chart_canvas" id="myChart" style="display: none;"></canvas>
+    </div>
+    <div class="chart_irrigation_div" id="chart_canvas_irrigation_div" style="display: none;">
+        <canvas class="chart_canvas_irrigation" id="myChartOfIrrigationCumul" style="display: none;"></canvas>
+    </div>
+</div>
+<div class="chart_description" id="chart_description" style="display: none;">
+    <pre><span style="font-weight: 400; font-size: 16px;">some explication for the chart:</span>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis ipsa dolores nam eius necessitatibus, expedita
+        pariatur consequuntur. Doloribus possimus deleniti fugit, nemo a illo accusamus repellendus corporis blanditiis,
+        non deserunt!</pre>
+</div>
+
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcWjaxqjhJ5V6mbjGM3Rs1MXoo4tN9ayY&callback=initMap">
+</script>
